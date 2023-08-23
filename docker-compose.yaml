@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  mysql_db_weather:
+    container_name: mysql_db_weather
+    image: mysql:8.0.32
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_USERNAME: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db_weather
+    ports:
+      - "3306:3306"
+    volumes:
+      - volume_mysql_db_weather:/var/lib/mysql
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=password --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
+volumes:
+  volume_mysql_db_weather:
+    external: false
