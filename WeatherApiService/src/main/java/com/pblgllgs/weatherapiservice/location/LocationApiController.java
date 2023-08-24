@@ -52,4 +52,14 @@ public class LocationApiController {
         }
     }
 
+    @DeleteMapping("/{code}")
+    public ResponseEntity<Object> deleteLocation(@PathVariable("code") String code) {
+        try {
+            service.delete(code);
+            return ResponseEntity.noContent().build();
+        } catch (LocationNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

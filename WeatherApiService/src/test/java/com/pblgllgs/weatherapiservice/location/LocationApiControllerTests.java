@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -249,5 +251,100 @@ class LocationApiControllerTests {
                 .andExpect(jsonPath("$.country_code", is("US")))
                 .andExpect(jsonPath("$.country_name", is("UNITED STATES OF AMERICA")))
                 .andDo(print());
+    }
+
+    @Test
+    void testDelete404NotFound() throws Exception {
+        String code = "CH_AR";
+        String requestURI = END_POINT_PATH + "/" + code;
+
+        Mockito.doThrow(LocationNotFoundException.class).when(service).delete(code);
+        mockMvc
+                .perform(
+                        delete(requestURI)
+                                .contentType("application/json")
+                ).andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    void testDelete204NoContent() throws Exception {
+        String code = "CH_CL";
+        String requestURI = END_POINT_PATH + "/" + code;
+
+        Mockito.doNothing().when(service).delete(code);
+        mockMvc
+                .perform(
+                        delete(requestURI)
+                                .contentType("application/json")
+                ).andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+    @Test
+    void testValidateRequestBodyLocationCodeNotNull() throws Exception {
+        Location location = new Location();
+        location.setCityName("New York City");
+        location.setRegionName("New York");
+        location.setCountryCode("US");
+        location.setCountryName("United States of America");
+        location.setEnabled(true);
+
+        String bodyContent = mapper.writeValueAsString(location);
+        mockMvc
+                .perform(
+                        post(END_POINT_PATH)
+                                .contentType("application/json")
+                                .content(bodyContent)
+                ).andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.errors[0]", is("Location code cannot be null")))
+                .andDo(print());
+    }
+
+    @Test
+    void testValidateRequestBodyLocationCodeLength() throws Exception {
+        Location location = new Location();
+        location.setCode("CH");
+        location.setCityName("New York City");
+        location.setRegionName("New York");
+        location.setCountryCode("US");
+        location.setCountryName("United States of America");
+        location.setEnabled(true);
+
+        String bodyContent = mapper.writeValueAsString(location);
+        mockMvc
+                .perform(
+                        post(END_POINT_PATH)
+                                .contentType("application/json")
+                                .content(bodyContent)
+                ).andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.errors[0]", is("Location code must ve 3-12 characters")))
+                .andDo(print());
+    }
+
+    @Test
+    void testValidateRequestBodyAllFieldsInvalid() throws Exception {
+        Location location = new Location();
+        location.setRegionName("");
+
+        String bodyContent = mapper.writeValueAsString(location);
+        MvcResult mvcResult = mockMvc
+                .perform(
+                        post(END_POINT_PATH)
+                                .contentType("application/json")
+                                .content(bodyContent)
+                ).andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json"))
+                .andDo(print())
+                .andReturn();
+        String responseBody = mvcResult.getResponse().getContentAsString();
+        assertThat(responseBody)
+                .contains("Location code cannot be null")
+                .contains("City name cannot be null")
+                .contains("Region name must ve 3-128 characters")
+                .contains("Country name cannot be null")
+                .contains("Country code cannot be null");
     }
 }
