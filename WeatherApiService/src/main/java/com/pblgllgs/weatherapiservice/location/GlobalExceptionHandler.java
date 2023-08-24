@@ -20,7 +20,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -34,7 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setTimestamp(new Date());
         errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorDTO.addError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        errorDTO.addError("Error", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         errorDTO.setPath(request.getServletPath());
 
         LOGGER.info(ex.getMessage(), ex);
@@ -53,10 +55,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorDTO.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDTO.setTimestamp(new Date());
         errorDTO.setPath(((ServletWebRequest) request).getRequest().getServletPath());
-        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        fieldErrors.forEach(fieldError -> {
-            errorDTO.addError(fieldError.getDefaultMessage());
-        });
+        errorDTO.setErrors(extractErrors(ex.getBindingResult().getFieldErrors()));
         return new ResponseEntity<>(errorDTO, headers, status);
+    }
+
+    private Map<String, String> extractErrors(List<FieldError> listErrors) {
+        Map<String, String> errorsMap = new HashMap<>();
+        listErrors.forEach(error -> errorsMap.put(error.getField(), error.getDefaultMessage()));
+        return errorsMap;
     }
 }

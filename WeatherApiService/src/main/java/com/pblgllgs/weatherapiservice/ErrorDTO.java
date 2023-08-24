@@ -1,15 +1,13 @@
 package com.pblgllgs.weatherapiservice;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ErrorDTO {
     private Date timestamp;
     private int status;
     private String path;
 
-    private List<String> errors = new ArrayList<>();
+    private Map<String,String> errors = new HashMap<>();
 
     public Date getTimestamp() {
         return timestamp;
@@ -35,15 +33,15 @@ public class ErrorDTO {
         this.path = path;
     }
 
-    public List<String> getErrors() {
+    public Map<String, String> getErrors() {
         return errors;
     }
 
-    public void setErrors(List<String> errors) {
+    public void setErrors(Map<String, String> errors) {
         this.errors = errors;
     }
 
-    public void addError(String error) {
-        this.errors.add(error);
+    public void addError(String error,String msg) {
+        this.errors.put(error, msg);
     }
 }
