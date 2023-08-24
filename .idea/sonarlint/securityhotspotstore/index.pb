@@ -5,8 +5,6 @@ H
 WeatherApiCommon/HELP.md,7\7\77e0ed7779384571d08aebf9b2e46423e8cac96e
 I
 WeatherApiService/HELP.md,c\a\caa66e9427313413c5ddb588ced50d9ec6b13498
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 W
 'WeatherApiCommon/weather-api-common.iml,1\f\1fa4e1abf4c93b91fb0fcffe34845a93abe57c87
 C
