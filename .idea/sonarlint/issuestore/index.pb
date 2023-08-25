@@ -23,8 +23,6 @@ _WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/Locatio
 fWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/LocationNotFoundException.java,e\d\ed9a0760f7590f1f516ddacf5c019b3b24b79d15
 H
 WeatherApiCommon/pom.xml,3\a\3a1e43462bdf5dcc55920abdaf052d3ea883b4fb
-—
-gWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/location/LocationApiControllerTests.java,e\d\ed3d14c9798912e88e8cb591025e883ee351859f
 ’
 bWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/LocationApiController.java,1\8\1816b4a394950345aff39c1e2eab21be6b88a621
 7
