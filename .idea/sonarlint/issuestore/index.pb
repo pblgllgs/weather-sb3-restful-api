@@ -13,10 +13,6 @@ C
 docker-compose.yaml,e\f\ef8def03dc8f162799089e9b5f4321201c8810d5
 ç
 ]WeatherApiCommon/src/main/java/com/pblgllgs/weatherapicommon/WeatherApiCommonApplication.java,0\1\018388d3ed5dec740fa1f4d2cbca465e906c5b72
-ê
-`WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/WeatherApiServiceApplication.java,6\6\66fa0780c6b95f8fc047477308c1e7a7f41a4e28
-è
-_WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/LocationRepository.java,0\d\0dc229c44f3cdfc2d84360f9519f2a6070701904
 å
 \WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/LocationService.java,4\6\46559b14d498db5565c136ef0e33141d3242ff90
 ñ
@@ -27,8 +23,6 @@ H
 bWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/LocationApiController.java,1\8\1816b4a394950345aff39c1e2eab21be6b88a621
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-I
-WeatherApiService/pom.xml,d\1\d13cb9f3019e91baec5f1820addb46dbdcd242e8
 S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
 ]
@@ -40,3 +34,5 @@ S
 cWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/GlobalExceptionHandler.java,b\5\b598c1ddb32bbef9962144d30ed0738195cfa93e
 |
 LWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/ErrorDTO.java,d\5\d576d92207ea877533da50bb8289c07bfd118917
+î
+dWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/location/LocationRepositoryTests.java,b\e\becf750f8e0afa1dc48b70b6ca043eed170440f8

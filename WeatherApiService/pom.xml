@@ -52,6 +52,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ip2location</groupId>
+            <artifactId>ip2location-java</artifactId>
+            <version>8.11.1</version>
+        </dependency>
     </dependencies>
 
     <build>
