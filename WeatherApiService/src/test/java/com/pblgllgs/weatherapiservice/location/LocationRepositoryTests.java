@@ -1,14 +1,15 @@
 package com.pblgllgs.weatherapiservice.location;
 
 import com.pblgllgs.weatherapicommon.common.Location;
+import com.pblgllgs.weatherapicommon.common.RealtimeWeather;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +22,7 @@ class LocationRepositoryTests {
     private LocationRepository locationRepository;
 
     @Test
-    void testAddSuccess(){
+    void testAddSuccess() {
         Location location = new Location();
         location.setCode("NYC_USA");
         location.setCityName("New York City");
@@ -62,5 +63,30 @@ class LocationRepositoryTests {
         locationRepository.trashByCode(code);
         Location location = locationRepository.findByCode(code);
         assertThat(location).isNull();
+    }
+
+    @Test
+    void testAddRealtimeWeatherData() {
+        String code = "CH_CL";
+        Location location = locationRepository.findByCode(code);
+        RealtimeWeather realtimeWeather = location.getRealtimeWeather();
+
+        if (realtimeWeather == null) {
+            realtimeWeather = new RealtimeWeather();
+            realtimeWeather.setLocation(location);
+            location.setRealtimeWeather(realtimeWeather);
+        }
+
+        realtimeWeather.setTemperature(10);
+        realtimeWeather.setHumidity(60);
+        realtimeWeather.setPrecipitation(70);
+        realtimeWeather.setStatus("Sunny");
+        realtimeWeather.setWindSpeed(10);
+        realtimeWeather.setLastUpdated(new Date());
+
+        Location updatedLocation = locationRepository.save(location);
+
+        assertThat(updatedLocation.getRealtimeWeather().getLocationCode()).isEqualTo(code);
+
     }
 }

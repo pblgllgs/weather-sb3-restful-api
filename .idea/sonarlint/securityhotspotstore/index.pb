@@ -23,12 +23,8 @@ _WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/Locatio
 fWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/LocationNotFoundException.java,e\d\ed9a0760f7590f1f516ddacf5c019b3b24b79d15
 H
 WeatherApiCommon/pom.xml,3\a\3a1e43462bdf5dcc55920abdaf052d3ea883b4fb
-î
-dWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/location/LocationRepositoryTests.java,b\e\becf750f8e0afa1dc48b70b6ca043eed170440f8
 ó
 gWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/location/LocationApiControllerTests.java,e\d\ed3d14c9798912e88e8cb591025e883ee351859f
-Å
-QWeatherApiCommon/src/main/java/com/pblgllgs/weatherapicommon/common/Location.java,6\4\64e18517b6d71243b2cfdb7c180153821bdee9a1
 í
 bWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/LocationApiController.java,1\8\1816b4a394950345aff39c1e2eab21be6b88a621
 7
@@ -42,3 +38,7 @@ S
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+|
+LWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/ErrorDTO.java,d\5\d576d92207ea877533da50bb8289c07bfd118917
+ì
+cWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/GlobalExceptionHandler.java,b\5\b598c1ddb32bbef9962144d30ed0738195cfa93e
