@@ -43,7 +43,7 @@ public class IP2LocationTests {
         IP2Location ipLocator = new IP2Location();
         ipLocator.Open(DBPath);
 
-        String ipAddress = "190.160.175.3";
+        String ipAddress = "102.217.236.255";
         IPResult ipResult = ipLocator.IPQuery(ipAddress);
 
         assertThat(ipResult.getStatus()).isEqualTo("OK");
