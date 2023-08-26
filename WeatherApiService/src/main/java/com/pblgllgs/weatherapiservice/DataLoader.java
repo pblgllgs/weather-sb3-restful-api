@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
+
 public class DataLoader implements CommandLineRunner {
 
     private final LocationRepository locationRepository;
