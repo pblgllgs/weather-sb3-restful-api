@@ -28,12 +28,10 @@ public class GeolocationService {
     public Location getLocation(String ipAddress) throws IOException, GeolocationException {
         try {
             IPResult result = ipLocator.IPQuery(ipAddress);
-            LOGGER.info(result.toString());
             if (!"OK".equals(result.getStatus())) {
                 throw new GeolocationException("Geolocation failed with status: " + result.getStatus());
             }
-            Location location = new Location(result.getCity(), result.getRegion(), result.getCountryLong(), result.getCountryShort());
-            return location;
+            return new Location(result.getCity(), result.getRegion(), result.getCountryLong(), result.getCountryShort());
         } catch (IOException ex) {
             throw new GeolocationException("Error querying IP database");
         }

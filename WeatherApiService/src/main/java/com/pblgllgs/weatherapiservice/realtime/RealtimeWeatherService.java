@@ -23,7 +23,6 @@ public class RealtimeWeatherService {
     }
 
     public RealtimeWeather getByLocation(Location location) {
-        LOGGER.info(location.toString());
         String countryCode = location.getCountryCode();
         String cityName = location.getCityName();
         RealtimeWeather realtimeWeather = realtimeWeatherRepository.findByCountryCodeAndCity(countryCode, cityName);

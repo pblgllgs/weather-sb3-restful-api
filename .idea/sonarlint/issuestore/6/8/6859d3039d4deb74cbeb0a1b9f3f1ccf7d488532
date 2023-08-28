@@ -1,7 +1,3 @@
 
 }
-java:S1488#"`Immediately return this expression instead of assigning it to the temporary variable "location".(Ÿ©§°8Î†—Û¢1
-@
-java:S2629"$Invoke method(s) only conditionally.(ìª£8ŸôÚ¢1
-}
-java:S1128"[Remove this unused import 'com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherService'.(¨¦çŠùÿÿÿÿ8œŒ•Û¢1
+java:S1128"[Remove this unused import 'com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherService'.(¨¦çŠùÿÿÿÿ8È¹ĞÑ£1

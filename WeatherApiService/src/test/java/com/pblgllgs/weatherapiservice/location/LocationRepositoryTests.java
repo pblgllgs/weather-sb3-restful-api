@@ -1,5 +1,6 @@
 package com.pblgllgs.weatherapiservice.location;
 
+import com.pblgllgs.weatherapicommon.common.HourlyWeather;
 import com.pblgllgs.weatherapicommon.common.Location;
 import com.pblgllgs.weatherapicommon.common.RealtimeWeather;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,21 @@ class LocationRepositoryTests {
         assertThat(locationSaved).isNotNull();
         assertThat(locationSaved.getCode())
                 .isEqualTo("NYC_USA");
+    }
+
+    @Test
+    void testAdd2Success() {
+        Location location = new Location();
+        location.setCode("MBMH_IN");
+        location.setCityName("Mumbai");
+        location.setRegionName("Maharashtra");
+        location.setCountryCode("IN");
+        location.setCountryName("India");
+        location.setEnabled(true);
+        Location locationSaved = locationRepository.save(location);
+        assertThat(locationSaved).isNotNull();
+        assertThat(locationSaved.getCode())
+                .isEqualTo("India");
     }
 
     @Test
@@ -88,5 +104,69 @@ class LocationRepositoryTests {
 
         assertThat(updatedLocation.getRealtimeWeather().getLocationCode()).isEqualTo(code);
 
+    }
+
+    @Test
+    void testHourlyWeatherData() {
+        Location location = locationRepository.findById("MBMH_IN").get();
+        List<HourlyWeather> listHourlyWeathers = location.getListHourlyWeathers();
+        HourlyWeather forecast1 = new HourlyWeather().id(location, 8)
+                .temperature(20)
+                .precipitation(60)
+                .status("Cloudy");
+
+        HourlyWeather forecast2 = new HourlyWeather().location(location).hourOfDay(9)
+                .temperature(20)
+                .precipitation(60)
+                .status("Cloudy");
+
+        listHourlyWeathers.add(forecast1);
+        listHourlyWeathers.add(forecast2);
+
+        Location updatedLocation = locationRepository.save(location);
+
+        assertThat(updatedLocation.getListHourlyWeathers()).isNotEmpty();
+
+    }
+
+    @Test
+    void testHourlyWeatherData2() {
+        Location location = locationRepository.findById("CL").get();
+        List<HourlyWeather> listHourlyWeathers = location.getListHourlyWeathers();
+        HourlyWeather forecast1 = new HourlyWeather().id(location, 8)
+                .temperature(10)
+                .precipitation(80)
+                .status("Cloudy");
+
+        HourlyWeather forecast2 = new HourlyWeather().location(location).hourOfDay(9)
+                .temperature(15)
+                .precipitation(70)
+                .status("Cloudy");
+
+        listHourlyWeathers.add(forecast1);
+        listHourlyWeathers.add(forecast2);
+
+        Location updatedLocation = locationRepository.save(location);
+
+        assertThat(updatedLocation.getListHourlyWeathers()).isNotEmpty();
+
+    }
+
+    @Test
+    void testFindLocationByCountryCodeAndCityNameFound() {
+        String countryCode = "US";
+        String cityName = "New York City";
+        Location lo = locationRepository.findByCountryCodeAndCityName(countryCode,cityName);
+        assertThat(lo).isNotNull();
+        assertThat(lo.getCountryCode()).isEqualTo(countryCode);
+        assertThat(lo.getCityName()).isEqualTo(cityName);
+    }
+
+    @Test
+    void testFindLocationByCountryCodeAndCityNameNotFound() {
+        String countryCode = "ASD";
+        String cityName = "TEST";
+        Location lo = locationRepository.findByCountryCodeAndCityName(countryCode,cityName);
+        assertThat(lo).isNull();
     }
 }

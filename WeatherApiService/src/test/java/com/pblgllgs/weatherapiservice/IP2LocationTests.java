@@ -9,9 +9,9 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IP2LocationTests {
+class IP2LocationTests {
 
-    private String DBPath = "ip2locdb/IP2LOCATION-LITE-DB3.BIN";
+    private final String DBPath = "ip2locdb/IP2LOCATION-LITE-DB3.BIN";
 
     @Test
     void testInvalidIp() throws IOException {
