@@ -12,8 +12,6 @@ import java.util.Date;
 
 @Service
 public class RealtimeWeatherService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RealtimeWeatherService.class);
-
     private final RealtimeWeatherRepository realtimeWeatherRepository;
     private final LocationRepository locationRepository;
 
@@ -27,7 +25,7 @@ public class RealtimeWeatherService {
         String cityName = location.getCityName();
         RealtimeWeather realtimeWeather = realtimeWeatherRepository.findByCountryCodeAndCity(countryCode, cityName);
         if (realtimeWeather == null) {
-            throw new LocationNotFoundException("Location not found with the given country code: " + countryCode + " and city name: " + cityName);
+            throw new LocationNotFoundException(countryCode, cityName);
         }
         return realtimeWeather;
     }
@@ -35,7 +33,7 @@ public class RealtimeWeatherService {
     public RealtimeWeather getByLocationCode(String locationCode) {
         RealtimeWeather realtimeWeather = realtimeWeatherRepository.findByLocationCode(locationCode);
         if (realtimeWeather == null) {
-            throw new LocationNotFoundException("Location not found with the given country code: " + locationCode);
+            throw new LocationNotFoundException(locationCode);
         }
         return realtimeWeather;
     }
@@ -43,11 +41,11 @@ public class RealtimeWeatherService {
     public RealtimeWeather update(String locationCode, RealtimeWeather realtimeWeather) {
         Location location = locationRepository.findByCode(locationCode);
         if (location == null) {
-            throw new LocationNotFoundException("Location not found");
+            throw new LocationNotFoundException(locationCode);
         }
         realtimeWeather.setLocation(location);
         realtimeWeather.setLastUpdated(new Date());
-        if(location.getRealtimeWeather() == null){
+        if (location.getRealtimeWeather() == null) {
             location.setRealtimeWeather(realtimeWeather);
             Location updatedLocation = locationRepository.save(location);
             return updatedLocation.getRealtimeWeather();

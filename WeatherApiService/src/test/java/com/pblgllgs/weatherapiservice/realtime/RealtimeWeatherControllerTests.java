@@ -47,8 +47,11 @@ class RealtimeWeatherControllerTests {
     @Test
     void testShouldReturnStatus404NotFound() throws Exception {
         Location location = new Location();
+        location.setCountryCode("ASD");
+        location.setCountryName("ASDASD");
         Mockito.when(geolocationService.getLocation(Mockito.anyString())).thenReturn(location);
-        Mockito.when(realtimeWeatherService.getByLocation(location)).thenThrow(LocationNotFoundException.class);
+        LocationNotFoundException locationNotFoundException = new LocationNotFoundException(location.getCountryCode(), location.getCityName());
+        Mockito.when(realtimeWeatherService.getByLocation(location)).thenThrow(locationNotFoundException);
         mockMvc.perform(get(END_POINT_PATH))
                 .andExpect(status().isNotFound())
                 .andDo(print());
@@ -77,19 +80,19 @@ class RealtimeWeatherControllerTests {
         Mockito.when(geolocationService.getLocation(Mockito.anyString())).thenReturn(location);
         Mockito.when(realtimeWeatherService.getByLocation(location)).thenReturn(realtimeWeather);
 
-        String expectedLocation = location.getCityName() +", "+location.getRegionName()+", "+location.getCountryName();
+        String expectedLocation = location.getCityName() + ", " + location.getRegionName() + ", " + location.getCountryName();
 
         mockMvc.perform(get(END_POINT_PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.location",is(expectedLocation)))
+                .andExpect(jsonPath("$.location", is(expectedLocation)))
                 .andDo(print());
     }
 
     @Test
     void testUpdateRealtimeShouldReturn404NotFound() throws Exception {
         String locationCode = "ASD";
-        String url = END_POINT_PATH+"/"+locationCode;
+        String url = END_POINT_PATH + "/" + locationCode;
 
         RealtimeWeather realtimeWeather = new RealtimeWeather();
         realtimeWeather.setTemperature(12);
@@ -98,8 +101,10 @@ class RealtimeWeatherControllerTests {
         realtimeWeather.setPrecipitation(88);
         realtimeWeather.setStatus("Cloudy");
         realtimeWeather.setWindSpeed(5);
+        realtimeWeather.setLocationCode(locationCode);
 
-        Mockito.when(realtimeWeatherService.update(locationCode,realtimeWeather)).thenThrow(LocationNotFoundException.class);
+        LocationNotFoundException locationNotFoundException = new LocationNotFoundException(locationCode);
+        Mockito.when(realtimeWeatherService.update(locationCode, realtimeWeather)).thenThrow(locationNotFoundException);
 
         String bodyContent = mapper.writeValueAsString(realtimeWeather);
 
@@ -111,7 +116,7 @@ class RealtimeWeatherControllerTests {
     @Test
     void testUpdateRealtimeShouldReturn400BadRequest() throws Exception {
         String locationCode = "ASD";
-        String url = END_POINT_PATH+"/"+locationCode;
+        String url = END_POINT_PATH + "/" + locationCode;
 
         RealtimeWeather realtimeWeather = new RealtimeWeather();
         realtimeWeather.setTemperature(120);
@@ -138,7 +143,7 @@ class RealtimeWeatherControllerTests {
         location.setCountryCode("CL");
 
         String locationCode = "CL";
-        String url = END_POINT_PATH+"/"+locationCode;
+        String url = END_POINT_PATH + "/" + locationCode;
 
         RealtimeWeather realtimeWeather = new RealtimeWeather();
         realtimeWeather.setTemperature(15);
@@ -152,15 +157,15 @@ class RealtimeWeatherControllerTests {
         realtimeWeather.setLocation(location);
         location.setRealtimeWeather(realtimeWeather);
 
-        Mockito.when(realtimeWeatherService.update(locationCode,realtimeWeather)).thenReturn(realtimeWeather);
+        Mockito.when(realtimeWeatherService.update(locationCode, realtimeWeather)).thenReturn(realtimeWeather);
 
         String bodyContent = mapper.writeValueAsString(realtimeWeather);
 
-        String expectedLocation = location.getCityName() +", "+location.getRegionName()+", "+location.getCountryName();
+        String expectedLocation = location.getCityName() + ", " + location.getRegionName() + ", " + location.getCountryName();
 
         mockMvc.perform(put(url).contentType("application/json").content(bodyContent))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.location",is(expectedLocation)))
+                .andExpect(jsonPath("$.location", is(expectedLocation)))
                 .andDo(print());
     }
 }

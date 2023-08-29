@@ -21,7 +21,7 @@ class RealtimeWeatherRepositoryTests {
 
     @Test
     void testUpdate(){
-        String locationCode = "NYC_USA";
+        String locationCode = "NYC_US";
         RealtimeWeather realtimeWeather = realtimeWeatherRepository.findById(locationCode).get();
         realtimeWeather.setTemperature(-1);
         realtimeWeather.setHumidity(32);
@@ -46,7 +46,7 @@ class RealtimeWeatherRepositoryTests {
 
     @Test
     void testFindByCountryCodeAndCityFound() {
-        String countryCode = "NYC_USA";
+        String countryCode = "US";
         String cityName = "New York City";
 
         RealtimeWeather realtimeWeather = realtimeWeatherRepository.findByCountryCodeAndCity(countryCode,cityName);

@@ -22,8 +22,16 @@ public class WeatherApiServiceApplication {
     public ModelMapper mapper() {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        TypeMap<HourlyWeather, HourlyWeatherDTO> typeMap = mapper.typeMap(HourlyWeather.class, HourlyWeatherDTO.class);
-        typeMap.addMapping(src -> src.getId().getHourOfDay(),HourlyWeatherDTO::setHourOfDay);
+        TypeMap<HourlyWeather, HourlyWeatherDTO> typeMap1 = mapper.typeMap(HourlyWeather.class, HourlyWeatherDTO.class);
+        typeMap1.addMapping(src -> src.getId().getHourOfDay(), HourlyWeatherDTO::setHourOfDay);
+        TypeMap<HourlyWeatherDTO, HourlyWeather> typeMap2 =
+                mapper
+                        .typeMap(
+                                HourlyWeatherDTO.class,
+                                HourlyWeather.class
+                        );
+        typeMap2.addMapping(src -> src.getHourOfDay(), (dest, value) -> dest.getId().setHourOfDay(value != null ?(int) value : 0));
+
         return mapper;
     }
 

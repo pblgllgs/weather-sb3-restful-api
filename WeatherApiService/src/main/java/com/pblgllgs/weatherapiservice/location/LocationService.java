@@ -24,30 +24,34 @@ public class LocationService {
     }
 
     @Transactional(readOnly = true)
-    public Location getLocation(String code) {
-        return repository.findByCode(code);
+    public Location getLocation(String code) throws LocationNotFoundException {
+        Location location = repository.findByCode(code);
+        if (location == null){
+            throw new LocationNotFoundException(code);
+        }
+        return location;
     }
 
     @Transactional
-    public Location update(Location location) {
-        String code = location.getCode();
-        Location lo = this.getLocation(code);
-        if (lo == null) {
-            throw new LocationNotFoundException("Location not found");
+    public Location update(Location locationInRequest) {
+        String code = locationInRequest.getCode();
+        Location locationInDB = this.getLocation(code);
+        if (locationInDB == null) {
+            throw new LocationNotFoundException(code);
         }
-        lo.setCountryName(location.getCountryName());
-        lo.setCountryCode(location.getCountryCode());
-        lo.setRegionName(location.getRegionName());
-        lo.setCityName(location.getCityName());
-        lo.setEnabled(location.isEnabled());
-        return repository.save(lo);
+        locationInDB.setCountryName(locationInRequest.getCountryName());
+        locationInDB.setCountryCode(locationInRequest.getCountryCode());
+        locationInDB.setRegionName(locationInRequest.getRegionName());
+        locationInDB.setCityName(locationInRequest.getCityName());
+        locationInDB.setEnabled(locationInRequest.isEnabled());
+        return repository.save(locationInDB);
     }
 
     @Transactional
     public void delete(String code) {
-        Location lo = this.getLocation(code);
-        if (lo == null) {
-            throw new LocationNotFoundException("Location not found");
+        Location location = this.getLocation(code);
+        if (location == null) {
+            throw new LocationNotFoundException(code);
         }
         repository.trashByCode(code);
     }

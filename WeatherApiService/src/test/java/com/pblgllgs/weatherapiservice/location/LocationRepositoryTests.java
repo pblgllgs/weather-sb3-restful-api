@@ -49,7 +49,7 @@ class LocationRepositoryTests {
         Location locationSaved = locationRepository.save(location);
         assertThat(locationSaved).isNotNull();
         assertThat(locationSaved.getCode())
-                .isEqualTo("India");
+                .isEqualTo("MBMH_IN");
     }
 
     @Test
@@ -83,7 +83,7 @@ class LocationRepositoryTests {
 
     @Test
     void testAddRealtimeWeatherData() {
-        String code = "CH_CL";
+        String code = "CL";
         Location location = locationRepository.findByCode(code);
         RealtimeWeather realtimeWeather = location.getRealtimeWeather();
 
