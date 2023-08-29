@@ -6,7 +6,6 @@ import com.pblgllgs.weatherapiservice.BadRequestException;
 import com.pblgllgs.weatherapiservice.CommonUtility;
 import com.pblgllgs.weatherapiservice.GeolocationException;
 import com.pblgllgs.weatherapiservice.GeolocationService;
-import com.pblgllgs.weatherapiservice.location.LocationNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -76,17 +75,18 @@ public class HourlyWeatherApiController {
     @PutMapping("/{locationCode}")
     public ResponseEntity<Object> updateHourlyForecast(
             @PathVariable("locationCode") String locationCode,
-            @Valid @RequestBody List<HourlyWeatherDTO> listHourly
+            @Valid @RequestBody List<HourlyWeatherDTO> listDTO
     ) throws BadRequestException {
-        if (listHourly.isEmpty()) {
+        if (listDTO.isEmpty()) {
             throw new BadRequestException("No hourly list");
         }
-        List<HourlyWeather> listHourlyWeather = listHourlyWeatherDTOToEntity(listHourly);
+        List<HourlyWeather> listHourlyWeather = listHourlyWeatherDTOToEntity(listDTO);
         List<HourlyWeather> hourlyWeathersUpdated = hourlyWeatherService.updateByLocationCode(locationCode, listHourlyWeather);
         return ResponseEntity.ok(listEntityToDTO(hourlyWeathersUpdated));
     }
 
     private HourlyWeatherListDTO listEntityToDTO(List<HourlyWeather> hourlyForecast) {
+
         Location location = hourlyForecast.get(0).getId().getLocation();
         HourlyWeatherListDTO listDTO = new HourlyWeatherListDTO();
         listDTO.setLocation(location.toString());

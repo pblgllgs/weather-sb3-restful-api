@@ -22,9 +22,9 @@ public class LocationApiController {
     }
 
     @PostMapping
-    public ResponseEntity<LocationDTO> addLocation(@Valid @RequestBody Location location) {
-        Location addedLocation = locationService.add(location);
-        URI uri = URI.create("/v1/locations/" + location.getCode());
+    public ResponseEntity<LocationDTO> addLocation(@Valid @RequestBody LocationDTO locationDTO) {
+        Location addedLocation = locationService.add(dtoToEntity(locationDTO));
+        URI uri = URI.create("/v1/locations/" + locationDTO.getCode());
         return ResponseEntity.created(uri).body(entity2DTO(addedLocation));
     }
 

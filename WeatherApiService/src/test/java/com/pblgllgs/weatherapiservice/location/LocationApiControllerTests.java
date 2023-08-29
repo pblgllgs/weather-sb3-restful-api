@@ -141,6 +141,7 @@ class LocationApiControllerTests {
     @Test
     void testGetLocation404NotFound() throws Exception {
         String requestUri= END_POINT_PATH+"/ASD";
+        Mockito.when(locationService.getLocation("ASD")).thenThrow(LocationNotFoundException.class);
         mockMvc.perform(get(requestUri))
                 .andExpect(status().isNotFound())
                 .andDo(print());
@@ -204,7 +205,7 @@ class LocationApiControllerTests {
                                 .contentType("application/json")
                                 .content(bodyContent)
                 )
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
