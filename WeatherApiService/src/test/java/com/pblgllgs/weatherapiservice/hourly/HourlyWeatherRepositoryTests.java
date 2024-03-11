@@ -1,9 +1,9 @@
 package com.pblgllgs.weatherapiservice.hourly;
 
 
-import com.pblgllgs.weatherapicommon.common.HourlyWeather;
-import com.pblgllgs.weatherapicommon.common.HourlyWeatherId;
-import com.pblgllgs.weatherapicommon.common.Location;
+import com.pblgllgs.weatherapiservice.common.HourlyWeather;
+import com.pblgllgs.weatherapiservice.common.HourlyWeatherId;
+import com.pblgllgs.weatherapiservice.common.Location;
 import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherRepository;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

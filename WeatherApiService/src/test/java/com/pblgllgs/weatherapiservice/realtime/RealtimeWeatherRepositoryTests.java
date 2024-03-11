@@ -1,6 +1,6 @@
 package com.pblgllgs.weatherapiservice.realtime;
 
-import com.pblgllgs.weatherapicommon.common.RealtimeWeather;
+import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

@@ -1,10 +1,10 @@
 package com.pblgllgs.weatherapiservice.realtime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pblgllgs.weatherapicommon.common.Location;
-import com.pblgllgs.weatherapicommon.common.RealtimeWeather;
 import com.pblgllgs.weatherapiservice.GeolocationException;
 import com.pblgllgs.weatherapiservice.GeolocationService;
+import com.pblgllgs.weatherapiservice.common.Location;
+import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import com.pblgllgs.weatherapiservice.location.LocationNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

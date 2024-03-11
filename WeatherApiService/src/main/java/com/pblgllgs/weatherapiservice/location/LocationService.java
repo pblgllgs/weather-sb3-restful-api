@@ -1,8 +1,8 @@
 package com.pblgllgs.weatherapiservice.location;
 
-import com.pblgllgs.weatherapicommon.common.Location;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.pblgllgs.weatherapiservice.common.Location;
 
 import java.util.List;
 

@@ -1,12 +1,8 @@
 
 T
 $src/main/java/com/pblgllgs/Main.java,e\2\e27eb0b73d5dc799fee2782596b967fd58a2759e
-H
-WeatherApiCommon/HELP.md,7\7\77e0ed7779384571d08aebf9b2e46423e8cac96e
 I
 WeatherApiService/HELP.md,c\a\caa66e9427313413c5ddb588ced50d9ec6b13498
-W
-'WeatherApiCommon/weather-api-common.iml,1\f\1fa4e1abf4c93b91fb0fcffe34845a93abe57c87
 C
 docker-compose.yaml,e\f\ef8def03dc8f162799089e9b5f4321201c8810d5
 L
@@ -24,8 +20,6 @@ S
 LWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/ErrorDTO.java,d\5\d576d92207ea877533da50bb8289c07bfd118917
 ñ
 fWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/realtime/RealtimeWeatherRepository.java,2\2\22d1749d38ba79efe9b54ab96ee87f05882619b5
-H
-WeatherApiCommon/pom.xml,3\a\3a1e43462bdf5dcc55920abdaf052d3ea883b4fb
 ~
 NWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/DataLoader.java,d\2\d2ad4765825b51c342a7819b5d33d8d7a49fa2d4
 à
@@ -44,12 +38,8 @@ I
 WWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/BadRequestException.java,6\4\6482e116dc33c4ea44fa6449f3ddc49a0e1970e0
 è
 _WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/realtime/RealtimeWeatherDTO.java,0\d\0d89551ff153adac1014d65bf1128ea3276d20d0
-à
-XWeatherApiCommon/src/main/java/com/pblgllgs/weatherapicommon/common/RealtimeWeather.java,1\9\19a7faf4158d129c05c05dfb30f1240b1d293944
 ñ
 fWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/hourlyweather/HourlyWeatherListDTO.java,b\8\b811abb8b256f34fb4540fbaa9e700bb8a2e0a91
-ç
-]WeatherApiCommon/src/main/java/com/pblgllgs/weatherapicommon/WeatherApiCommonApplication.java,0\1\018388d3ed5dec740fa1f4d2cbca465e906c5b72
 ô
 iWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/realtime/RealtimeWeatherApiController.java,4\d\4d7dedc29f6eacaab9e7a13ea13a95003fb682b1
 å
@@ -60,8 +50,6 @@ fWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/Locatio
 cWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/realtime/RealtimeWeatherService.java,1\7\171dcd626d47e0657886d0abee41cffc3aa219c4
 õ
 kWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/realtime/RealtimeWeatherControllerTests.java,9\a\9aae96d6e3326656eb2f1a44e3dfb57cb348e506
-à
-XWeatherApiCommon/src/main/java/com/pblgllgs/weatherapicommon/common/HourlyWeatherId.java,d\8\d83d13ed8edc007b6d275f7fce2974abbee66b59
 ó
 gWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/hourly/HourlyWeatherRepositoryTests.java,4\4\44260ec584d03556cf66a28de0e508cc2f6bb4cf
 î
@@ -72,8 +60,6 @@ kWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/realtime/Realtim
 TWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/IP2LocationTests.java,c\2\c24dfc50b31d6dcbdc10e6330e080729b62514f2
 ä
 ZWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/GlobalExceptionHandler.java,d\b\dbd63fb20fbadff1674c724f2257bcae03fa23d2
-Å
-QWeatherApiCommon/src/main/java/com/pblgllgs/weatherapicommon/common/Location.java,6\4\64e18517b6d71243b2cfdb7c180153821bdee9a1
 à
 XWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/LocationDTO.java,e\2\e2abb5232819ba6e29750538e9e276bf3fe1ef69
 í
@@ -86,8 +72,6 @@ bWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/hourlyweather/Ho
 fWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/hourlyweather/HourlyWeatherService.java,3\b\3bb145d33af6c1ccda739d36d1ad0fc34f074c3b
 ê
 `WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/WeatherApiServiceApplication.java,6\6\66fa0780c6b95f8fc047477308c1e7a7f41a4e28
-Ü
-VWeatherApiCommon/src/main/java/com/pblgllgs/weatherapicommon/common/HourlyWeather.java,7\5\75a9b1f13c51359dd1030b20a455bcaff84ef3e1
 ú
 lWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/hourlyweather/HourlyWeatherApiController.java,0\4\04c896bf5489b0b70d5d11928a67d091201477d4
 ö
@@ -96,3 +80,15 @@ jWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/hourly/HourlyWea
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 O
 weather.postman_collection.json,1\1\1183a255c536801ab3e87a873aaffe7f371d9ba8
+L
+WeatherApiService/Dockerfile,c\7\c7b913fe9f947ef2bce745425466c7bb59ac02ae
+à
+XWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/common/HourlyWeather.java,6\3\634a42ca16a55151084fd94689896bad10263c65
+ä
+ZWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/common/HourlyWeatherId.java,8\d\8daa5e8515006455fd8efc6aedece7dbe397c438
+É
+SWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/common/Location.java,c\7\c74c2971473a0d67f8e1ec6e6a2ba3851bc25533
+ä
+ZWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/common/RealtimeWeather.java,e\3\e37ed5174ae16fc3a3f0e7f4d26f67d00890a5c0
+ï
+eWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/WeatherApiServiceApplicationTests.java,8\c\8c1a3844b92f15e753857258ff82a2ae50c41401

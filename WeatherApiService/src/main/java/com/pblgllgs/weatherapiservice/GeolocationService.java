@@ -2,8 +2,7 @@ package com.pblgllgs.weatherapiservice;
 
 import com.ip2location.IP2Location;
 import com.ip2location.IPResult;
-import com.pblgllgs.weatherapicommon.common.Location;
-import com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherService;
+import com.pblgllgs.weatherapiservice.common.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

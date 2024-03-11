@@ -1,6 +1,6 @@
 package com.pblgllgs.weatherapiservice.realtime;
 
-import com.pblgllgs.weatherapicommon.common.RealtimeWeather;
+import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

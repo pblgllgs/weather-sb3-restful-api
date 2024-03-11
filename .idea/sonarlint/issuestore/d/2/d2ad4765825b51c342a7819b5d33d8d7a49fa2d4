@@ -1,7 +1,5 @@
 
-h
-java:S1192%"FDefine a constant instead of duplicating this literal "CH_CL" 4 times.(ãæñıÿÿÿÿ8¢ŞßÔ¢1
-e
-java:S1192"HDefine a constant instead of duplicating this literal "NYC_USA" 5 times.(ªÄ¡€8·äÆÔ¢1
-g
-java:S1128"ERemove this unused import 'org.springframework.stereotype.Component'.(Ş÷Ñ¸ÿÿÿÿÿ8®ß©ú¢1
+
+java:S1192%"FDefine a constant instead of duplicating this literal "CH_CL" 4 times.(ãæñıÿÿÿÿ8¢ŞßÔ¢1J$ec3eddc4-1054-4f43-bd37-46b0a8538b8e
+‹
+java:S1192"HDefine a constant instead of duplicating this literal "NYC_USA" 5 times.(ªÄ¡€8·äÆÔ¢1J$99bef268-e154-4876-928f-aa1b54b04651

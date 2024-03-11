@@ -1,11 +1,11 @@
 package com.pblgllgs.weatherapiservice.hourlyweather;
 
-import com.pblgllgs.weatherapicommon.common.HourlyWeather;
-import com.pblgllgs.weatherapicommon.common.Location;
 import com.pblgllgs.weatherapiservice.BadRequestException;
 import com.pblgllgs.weatherapiservice.CommonUtility;
 import com.pblgllgs.weatherapiservice.GeolocationException;
 import com.pblgllgs.weatherapiservice.GeolocationService;
+import com.pblgllgs.weatherapiservice.common.HourlyWeather;
+import com.pblgllgs.weatherapiservice.common.Location;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;

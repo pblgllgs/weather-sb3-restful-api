@@ -1,10 +1,10 @@
 package com.pblgllgs.weatherapiservice.realtime;
 
-import com.pblgllgs.weatherapicommon.common.Location;
-import com.pblgllgs.weatherapicommon.common.RealtimeWeather;
 import com.pblgllgs.weatherapiservice.CommonUtility;
 import com.pblgllgs.weatherapiservice.GeolocationException;
 import com.pblgllgs.weatherapiservice.GeolocationService;
+import com.pblgllgs.weatherapiservice.common.Location;
+import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import com.pblgllgs.weatherapiservice.location.LocationNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

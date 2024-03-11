@@ -1,7 +1,7 @@
 package com.pblgllgs.weatherapiservice.location;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pblgllgs.weatherapicommon.common.Location;
+import com.pblgllgs.weatherapiservice.common.Location;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

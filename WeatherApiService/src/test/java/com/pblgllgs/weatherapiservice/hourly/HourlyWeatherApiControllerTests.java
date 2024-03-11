@@ -1,10 +1,10 @@
 package com.pblgllgs.weatherapiservice.hourly;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pblgllgs.weatherapicommon.common.HourlyWeather;
-import com.pblgllgs.weatherapicommon.common.Location;
 import com.pblgllgs.weatherapiservice.GeolocationException;
 import com.pblgllgs.weatherapiservice.GeolocationService;
+import com.pblgllgs.weatherapiservice.common.HourlyWeather;
+import com.pblgllgs.weatherapiservice.common.Location;
 import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherApiController;
 import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherDTO;
 import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherService;

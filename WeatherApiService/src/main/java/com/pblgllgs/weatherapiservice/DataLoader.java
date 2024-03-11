@@ -1,7 +1,7 @@
 package com.pblgllgs.weatherapiservice;
 
-import com.pblgllgs.weatherapicommon.common.Location;
-import com.pblgllgs.weatherapicommon.common.RealtimeWeather;
+import com.pblgllgs.weatherapiservice.common.Location;
+import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import com.pblgllgs.weatherapiservice.location.LocationRepository;
 import com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherRepository;
 import org.springframework.boot.CommandLineRunner;

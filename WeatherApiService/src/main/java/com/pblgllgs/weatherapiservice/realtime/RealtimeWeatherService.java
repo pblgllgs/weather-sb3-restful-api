@@ -1,7 +1,7 @@
 package com.pblgllgs.weatherapiservice.realtime;
 
-import com.pblgllgs.weatherapicommon.common.Location;
-import com.pblgllgs.weatherapicommon.common.RealtimeWeather;
+import com.pblgllgs.weatherapiservice.common.Location;
+import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import com.pblgllgs.weatherapiservice.location.LocationNotFoundException;
 import com.pblgllgs.weatherapiservice.location.LocationRepository;
 import org.slf4j.Logger;

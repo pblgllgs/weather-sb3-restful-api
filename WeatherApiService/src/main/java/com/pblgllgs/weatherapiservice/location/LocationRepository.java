@@ -1,6 +1,6 @@
 package com.pblgllgs.weatherapiservice.location;
 
-import com.pblgllgs.weatherapicommon.common.Location;
+import com.pblgllgs.weatherapiservice.common.Location;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

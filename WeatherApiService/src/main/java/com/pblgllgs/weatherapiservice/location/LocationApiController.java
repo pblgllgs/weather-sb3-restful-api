@@ -1,6 +1,6 @@
 package com.pblgllgs.weatherapiservice.location;
 
-import com.pblgllgs.weatherapicommon.common.Location;
+import com.pblgllgs.weatherapiservice.common.Location;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;

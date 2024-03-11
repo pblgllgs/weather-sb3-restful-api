@@ -14,6 +14,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/WeatherApiCommon/pom.xml" />
         <option value="$PROJECT_DIR$/src/WeatherApiCommon/WeatherapiService/pom.xml" />
         <option value="$PROJECT_DIR$/src/WeatherApiCommon/pom.xml" />
         <option value="$PROJECT_DIR$/src/WeatherApiService/pom.xml" />
