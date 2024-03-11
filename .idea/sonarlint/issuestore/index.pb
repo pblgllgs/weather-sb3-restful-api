@@ -92,3 +92,7 @@ XWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/Locatio
 gWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/location/LocationApiControllerTests.java,e\d\ed3d14c9798912e88e8cb591025e883ee351859f
 š
 jWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/hourly/HourlyWeatherApiControllerTests.java,8\7\87f5232eff24c4940b85b7be70a8e26ab0777c26
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+O
+weather.postman_collection.json,1\1\1183a255c536801ab3e87a873aaffe7f371d9ba8

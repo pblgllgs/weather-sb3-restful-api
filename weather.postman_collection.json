@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "24c6b1d0-29ff-4273-b169-046437f686c2",
+		"name": "weather",
+		"description": "[https://github.com/pblgllgs/weather-sb3-restful-api](https://github.com/pblgllgs/weather-sb3-restful-api)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "17450698"
+	},
+	"item": [
+		{
+			"name": "app",
+			"item": [
+				{
+					"name": "location NYC",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":\"NYC_US\",\r\n    \"city_name\":\"New York\",\r\n    \"region_name\":\"New York City\",\r\n    \"country_code\":\"US\",\r\n    \"country_name\":\"United States Of America\",\r\n    \"enabled\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/v1/locations"
+					},
+					"response": []
+				},
+				{
+					"name": "location CL SANTIAGO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":\"SCL\",\r\n    \"city_name\":\"Santiago\",\r\n    \"region_name\":\"Region Metropolitana\",\r\n    \"country_code\":\"CL\",\r\n    \"country_name\":\"Republica de Chile\",\r\n    \"enabled\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/v1/locations"
+					},
+					"response": []
+				},
+				{
+					"name": "location CL CONCEPCION",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":\"CC_CL\",\r\n    \"city_name\":\"Concepcion\",\r\n    \"region_name\":\"Concepcion\",\r\n    \"country_code\":\"CL\",\r\n    \"country_name\":\"Republica de Chile\",\r\n    \"enabled\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/v1/locations"
+					},
+					"response": []
+				},
+				{
+					"name": "add-weather-by-hour",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"temperature\": 10,\r\n        \"precipitation\": 50,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 8\r\n    },\r\n    {\r\n        \"temperature\": 15,\r\n        \"precipitation\": 50,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 9\r\n    },\r\n    {\r\n        \"temperature\": 16,\r\n        \"precipitation\": 40,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 10\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/hourly/SCL"
+					},
+					"response": []
+				},
+				{
+					"name": "add-realtime-weather",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"temperature\":50,\r\n    \"humidity\":20,\r\n    \"precipitation\":25,\r\n    \"status\":\"Cloudy\",\r\n    \"wind_speed\":30\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/realtime/NYC_US"
+					},
+					"response": []
+				},
+				{
+					"name": "locations",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/locations"
+					},
+					"response": []
+				},
+				{
+					"name": "realtimeByIPAddress",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-FORWARED-FOR",
+								"value": "101.46.168.0",
+								"type": "text"
+							}
+						],
+						"url": "{{base_url}}/v1/realtime"
+					},
+					"response": []
+				},
+				{
+					"name": "realtimeByLocationCode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/v1/realtime/SCL"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "crud",
+			"item": [
+				{
+					"name": "hourly",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/v1/hourly"
+					},
+					"response": []
+				},
+				{
+					"name": "hourlyNoContent",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-FORWARED-FOR",
+								"value": "102.217.236.255",
+								"type": "text"
+							},
+							{
+								"key": "X-Current-Hour",
+								"value": "10",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":\"NYC_USA\",\r\n    \"city_name\":\"New York City\",\r\n    \"region_name\":\"New York\",\r\n    \"country_code\":\"US\",\r\n    \"country_name\":\"United States of America\",\r\n    \"enabled\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/hourly"
+					},
+					"response": []
+				},
+				{
+					"name": "hourly200OK",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-FORWARED-FOR",
+								"value": "101.46.168.0",
+								"type": "text"
+							},
+							{
+								"key": "X-Current-Hour",
+								"value": "7",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/v1/hourly"
+					},
+					"response": []
+				},
+				{
+					"name": "hourlyByCountryCode200OK",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-FORWARED-FOR",
+								"value": "190.172.133.244",
+								"type": "text"
+							},
+							{
+								"key": "X-Current-Hour",
+								"value": "12",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/v1/hourly/S_CL"
+					},
+					"response": []
+				},
+				{
+					"name": "locations",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/v1/locations/ARG"
+					},
+					"response": []
+				},
+				{
+					"name": "locations",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/locations/CH_CL"
+					},
+					"response": []
+				},
+				{
+					"name": "locations",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"CH_CL\",\r\n    \"enabled\": false,\r\n    \"city_name\": \"CHILLAN\",\r\n    \"region_name\": \"ÑUBLE\",\r\n    \"country_name\": \"CHILE\",\r\n    \"country_code\": \"CL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/locations"
+					},
+					"response": []
+				},
+				{
+					"name": "realtime404",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"temperature\":50,\r\n    \"humidity\":20,\r\n    \"precipitation\":25,\r\n    \"status\":\"Cloudy\",\r\n    \"wind_speed\":30\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/realtime/ASD"
+					},
+					"response": []
+				},
+				{
+					"name": "realtime400",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"temperature\":120,\r\n    \"humidity\":120,\r\n    \"precipitation\":120,\r\n    \"status\":\"CL\",\r\n    \"wind_speed\":500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/realtime/ASD"
+					},
+					"response": []
+				},
+				{
+					"name": "hourly400",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/hourly/CL"
+					},
+					"response": []
+				},
+				{
+					"name": "hourly400InvalidData",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"temperature\": 100,\r\n        \"precipitation\": 50,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 8\r\n    },\r\n    {\r\n        \"temperature\": 100,\r\n        \"precipitation\": 50,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 9\r\n    },\r\n    {\r\n        \"temperature\": 110,\r\n        \"precipitation\": 40,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 10\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/hourly/CL"
+					},
+					"response": []
+				},
+				{
+					"name": "hourly404Location",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"temperature\": 10,\r\n        \"precipitation\": 50,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 8\r\n    },\r\n    {\r\n        \"temperature\": 10,\r\n        \"precipitation\": 50,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 9\r\n    },\r\n    {\r\n        \"temperature\": 11,\r\n        \"precipitation\": 40,\r\n        \"status\": \"Cloudy\",\r\n        \"hour_of_day\": 10\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/v1/hourly/asdasdasd"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
