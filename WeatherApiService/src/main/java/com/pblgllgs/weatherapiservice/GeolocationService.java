@@ -9,17 +9,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class GeolocationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GeolocationService.class);
-    private static final String DBPATH = "WeatherApiService/ip2locdb/IP2LOCATION-LITE-DB3.BIN";
+    private static final String DBPATH = "/ip2locdb/IP2LOCATION-LITE-DB3.BIN";
     private final IP2Location ipLocator = new IP2Location();
 
     public GeolocationService() {
         try {
-            ipLocator.Open(DBPATH);
+            InputStream inputStream = getClass().getResourceAsStream(DBPATH);
+            byte[] data = inputStream.readAllBytes();
+            ipLocator.Open(data);
+            inputStream.close();
         } catch (IOException e) {
             LOGGER.info(e.getMessage(), e);
         }
