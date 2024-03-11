@@ -45,7 +45,7 @@ curl --location --request PUT 'http://localhost:8080/v1/hourly/SCL' \
 ## Insert weather realtime
 
 ```bash
-curl --location --request PUT 'http://localhost:8080/v1/realtime/NYC_US' \
+curl --location --request PUT 'http://localhost:8080/v1/realtime/SCL' \
 --header 'Content-Type: application/json' \
 --data '{
     "temperature":50,
