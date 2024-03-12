@@ -1,0 +1,9 @@
+
+	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8ŠÅŞ„ã1J$6c64587a-c145-44ba-8965-80435c922592
+ˆ
+java:S1128
+"@Remove this unused import 'org.springframework.http.HttpStatus'.(íŸ¤Šúÿÿÿÿ8¯éØ„ã1J$1932e7d6-18a5-4d9b-a20e-8a4daf757c8a
+Œ
+java:S1128"DRemove this unused import 'org.springframework.http.ResponseEntity'.(¶¯ø¦úÿÿÿÿ8¯éØ„ã1J$144dcbc1-763e-466f-be8d-978647363ebf
+—
+java:S1128"ORemove this unused import 'org.springframework.web.client.RestClientException'.(Ûûø½şÿÿÿÿ8”®ß„ã1J$01c96abe-2ae0-4885-ba70-9a519ab0e8f9

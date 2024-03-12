@@ -15,5 +15,6 @@
     </properties>
     <modules>
         <module>WeatherApiService</module>
+        <module>WeatherApiClient</module>
     </modules>
 </project>
