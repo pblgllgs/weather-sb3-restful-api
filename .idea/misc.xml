@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/WeatherApiCommon/pom.xml" />
         <option value="$PROJECT_DIR$/WeatherApiService/pom.xml" />
         <option value="$PROJECT_DIR$/WeatherApiClient/pom.xml" />
+        <option value="$PROJECT_DIR$/WeatherSpringMVC/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

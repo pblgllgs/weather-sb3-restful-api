@@ -7,7 +7,6 @@ package com.pblgllgs.weatherapiclient.client;
  */
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.*;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 @Slf4j
-public class AddLocationAsLocationObject {
+public class AddLocationAsObject {
     public static void main(String[] args) {
         String requestURI = "http://localhost:8080/v1/locations";
         RestTemplate restTemplate = new RestTemplate();
