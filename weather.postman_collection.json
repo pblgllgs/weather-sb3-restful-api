@@ -127,7 +127,7 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "X-FORWARED-FOR",
+								"key": "X-FORWARDED-FOR",
 								"value": "101.46.168.0",
 								"type": "text"
 							}
@@ -180,7 +180,7 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "X-FORWARED-FOR",
+								"key": "X-FORWARDED-FOR",
 								"value": "102.217.236.255",
 								"type": "text"
 							},
@@ -212,7 +212,7 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "X-FORWARED-FOR",
+								"key": "X-FORWARDED-FOR",
 								"value": "101.46.168.0",
 								"type": "text"
 							},
@@ -244,7 +244,7 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "X-FORWARED-FOR",
+								"key": "X-FORWARDED-FOR",
 								"value": "190.172.133.244",
 								"type": "text"
 							},

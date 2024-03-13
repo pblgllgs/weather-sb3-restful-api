@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,5 +58,19 @@ class DailyWeatherRepositoryTests {
 
         assertThat(dailyWeatherRepositoryById).isNotPresent();
 
+    }
+
+    @Test
+    void testFindByLocationCodeNotFound(){
+        String locationCode = "ABC_XYZ";
+        List<DailyWeather> listDailyWeather = dailyWeatherRepository.findByLocationCode(locationCode);
+        assertThat(listDailyWeather).isEmpty();
+    }
+
+    @Test
+    void testFindByLocationCodeFound(){
+        String locationCode = "NYC_US";
+        List<DailyWeather> listDailyWeather = dailyWeatherRepository.findByLocationCode(locationCode);
+        assertThat(listDailyWeather).isNotEmpty();
     }
 }

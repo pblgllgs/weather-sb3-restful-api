@@ -18,7 +18,7 @@ public class GetRealTimeWeatherByIPAddressAsJSONString {
         String ip = "101.46.168.0";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("X-FORWARED-FOR", ip);
+        headers.add("X-FORWARDED-FOR", ip);
         HttpEntity<String> requestHeaders = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> location = restTemplate.exchange(requestURI, HttpMethod.GET, requestHeaders, String.class);

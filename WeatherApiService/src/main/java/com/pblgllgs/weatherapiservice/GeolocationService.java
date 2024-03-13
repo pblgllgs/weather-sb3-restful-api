@@ -3,6 +3,7 @@ package com.pblgllgs.weatherapiservice;
 import com.ip2location.IP2Location;
 import com.ip2location.IPResult;
 import com.pblgllgs.weatherapiservice.common.Location;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Service
+@Slf4j
 public class GeolocationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GeolocationService.class);
@@ -31,6 +33,7 @@ public class GeolocationService {
     public Location getLocation(String ipAddress) throws IOException, GeolocationException {
         try {
             IPResult result = ipLocator.IPQuery(ipAddress);
+            log.info(result.toString());
             if (!"OK".equals(result.getStatus())) {
                 throw new GeolocationException("Geolocation failed with status: " + result.getStatus());
             }

@@ -4,8 +4,6 @@ import com.pblgllgs.weatherapiservice.common.Location;
 import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import com.pblgllgs.weatherapiservice.location.LocationNotFoundException;
 import com.pblgllgs.weatherapiservice.location.LocationRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

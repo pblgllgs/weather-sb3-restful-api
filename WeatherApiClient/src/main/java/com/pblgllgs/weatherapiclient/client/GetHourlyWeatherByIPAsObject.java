@@ -23,7 +23,7 @@ public class GetHourlyWeatherByIPAsObject {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         headers.add("X-CURRENT-HOUR", "7");
-        headers.add("X-FORWARED-FOR","101.46.168.0");
+        headers.add("X-FORWARDED-FOR","101.46.168.0");
 
         HttpEntity<HourlyForecastDTO> httpEntity = new HttpEntity<HourlyForecastDTO>(headers);
         ResponseEntity<HourlyForecastDTO> responseEntity =

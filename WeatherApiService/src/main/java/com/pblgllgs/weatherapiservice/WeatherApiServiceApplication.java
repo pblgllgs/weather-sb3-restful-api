@@ -1,6 +1,8 @@
 package com.pblgllgs.weatherapiservice;
 
+import com.pblgllgs.weatherapiservice.common.DailyWeather;
 import com.pblgllgs.weatherapiservice.common.HourlyWeather;
+import com.pblgllgs.weatherapiservice.daily.DailyWeatherDTO;
 import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -29,6 +31,10 @@ public class WeatherApiServiceApplication {
                                 HourlyWeather.class
                         );
         typeMap2.addMapping(src -> src.getHourOfDay(), (dest, value) -> dest.getId().setHourOfDay(value != null ?(int) value : 0));
+
+        TypeMap<DailyWeather, DailyWeatherDTO> typeMap3 = mapper.typeMap(DailyWeather.class, DailyWeatherDTO.class);
+        typeMap3.addMapping(src -> src.getId().getDayOfMonth(),DailyWeatherDTO::setDayOfMonth);
+        typeMap3.addMapping(src -> src.getId().getMonth(),DailyWeatherDTO::setMonth);
 
         return mapper;
     }

@@ -45,6 +45,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return errorDTO;
     }
 
+    @ExceptionHandler(GeolocationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorDTO handlerGeolocationException(HttpServletRequest request, GeolocationException ex) {
+        ErrorDTO errorDTO = new ErrorDTO();
+        errorDTO.setTimestamp(new Date());
+        errorDTO.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDTO.addError(ERROR, HttpStatus.BAD_REQUEST.getReasonPhrase());
+        errorDTO.setPath(request.getServletPath());
+
+        LOGGER_LOG.info(ex.getMessage(), ex);
+
+        return errorDTO;
+    }
+
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -67,7 +82,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setTimestamp(new Date());
         errorDTO.setStatus(HttpStatus.NOT_FOUND.value());
-        errorDTO.addError(ERROR, HttpStatus.NOT_FOUND.getReasonPhrase());
+        errorDTO.addError(ERROR, ex.getMessage());
         errorDTO.setPath(request.getServletPath());
 
         LOGGER_LOG.info(ex.getMessage(), ex);

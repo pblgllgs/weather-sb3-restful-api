@@ -62,7 +62,7 @@ curl --location --request PUT 'http://localhost:8080/v1/realtime/SCL' \
 
 ```bash
 curl --location 'http://localhost:8080/v1/realtime' \
---header 'X-FORWARED-FOR: 101.46.168.0'
+--header 'X-FORWARDED-FOR: 101.46.168.0'
 ```
 ### Fetch realtime weather by ip location
 
