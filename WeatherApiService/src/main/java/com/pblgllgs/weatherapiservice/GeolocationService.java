@@ -6,12 +6,13 @@ import com.pblgllgs.weatherapiservice.common.Location;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@Service
+@Component
 @Slf4j
 public class GeolocationService {
 

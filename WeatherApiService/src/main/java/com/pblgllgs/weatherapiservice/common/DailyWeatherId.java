@@ -1,5 +1,6 @@
 package com.pblgllgs.weatherapiservice.common;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -26,5 +27,6 @@ public class DailyWeatherId implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "location_code")
+    @JsonBackReference
     private Location location;
 }

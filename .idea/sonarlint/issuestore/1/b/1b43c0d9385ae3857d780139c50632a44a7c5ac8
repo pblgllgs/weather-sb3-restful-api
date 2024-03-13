@@ -1,7 +1,8 @@
 
 n
-java:S1452$"&Remove usage of generic wildcard type.(³Ğ‘íıÿÿÿÿ8ÁÊ¥Åã1J$d56cbc9f-9e62-4982-855f-d70dd9c9c7ea
-n
-java:S16025",Remove useless curly braces around statement(ëÓÛ8ÅÊ¥Åã1J$caa63aa5-9eb7-46a5-a276-56a8123939aa
-œ
-java:S1128"TRemove this unused import 'com.pblgllgs.weatherapiservice.location.LocationService'.(‘ÖÙ†ıÿÿÿÿ8ÇÊ¥Åã1J$295b89c2-3722-43bf-98ad-07629c13eb9e
+java:S1602J",Remove useless curly braces around statement(ëÓÛ8üàÂËã1J$60cae040-4b3a-4d9b-b418-0cc814e2efb1
+v
+java:S1128"TRemove this unused import 'com.pblgllgs.weatherapiservice.location.LocationService'.(‘ÖÙ†ıÿÿÿÿ8ÙõÂËã1
+]
+java:S1128
+";Remove this unused import 'lombok.RequiredArgsConstructor'.(ÑØúøÿÿÿÿ8ÙõÂËã1

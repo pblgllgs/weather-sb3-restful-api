@@ -10,9 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,15 +23,20 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/v1/daily")
-@RequiredArgsConstructor
 public class DailyWeatherApiController {
 
     private final DailyWeatherService dailyWeatherService;
     private final GeolocationService geolocationService;
     private final ModelMapper modelMapper;
 
+    public DailyWeatherApiController(DailyWeatherService dailyWeatherService, GeolocationService geolocationService, ModelMapper modelMapper) {
+        this.dailyWeatherService = dailyWeatherService;
+        this.geolocationService = geolocationService;
+        this.modelMapper = modelMapper;
+    }
+
     @GetMapping
-    public ResponseEntity<?> listDailyForecastByIPAddress(HttpServletRequest request) throws GeolocationException, IOException {
+    public ResponseEntity<DailyWeatherListDTO> listDailyForecastByIPAddress(HttpServletRequest request) throws GeolocationException, IOException {
         String ipAddress = CommonUtility.getIPAddress(request);
         Location locationFromIp = geolocationService.getLocation(ipAddress);
 
@@ -44,6 +47,24 @@ public class DailyWeatherApiController {
         }
 
         return ResponseEntity.ok().body(listEntityToDTO(dailyWeatherList));
+    }
+
+    @GetMapping("/{locationCode}")
+    public ResponseEntity<DailyWeatherListDTO> listDailyForecastByLocationCode(
+            @PathVariable("locationCode") String locationCode
+    ){
+        List<DailyWeather> dailyWeatherList = dailyWeatherService.getByLocationCode(locationCode);
+        if (dailyWeatherList.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(listEntityToDTO(dailyWeatherList));
+    }
+
+    @PostMapping("/{locationCode}")
+    public ResponseEntity<DailyWeather> saveDailyForecast(
+            @RequestBody DailyWeatherDTO dto,
+            @PathVariable("locationCode") String locationCode){
+        return ResponseEntity.ok().body(dailyWeatherService.save(dto,locationCode));
     }
 
     private DailyWeatherListDTO listEntityToDTO(List<DailyWeather> dailyWeatherList) {

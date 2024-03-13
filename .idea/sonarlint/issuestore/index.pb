@@ -174,3 +174,7 @@ cWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeath
 YWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherDTO.java,1\9\199ce8890120a0a860829f4ad5c528791ce0f0c1
 ò
 hWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherApiControllerTests.java,9\7\9778b9f02ebdf7b47d6e1ae15d1466712125428b
+å
+\WeatherApiClient/src/main/java/com/pblgllgs/weatherapiclient/client/AddLocationAsObject.java,8\9\894bd74230380251c166e8f8f1b8bd9ce2761a44
+ç
+]WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherRequest.java,8\2\8252180b91142972fb53de075be0e47d402d64b8

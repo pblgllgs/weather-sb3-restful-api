@@ -24,20 +24,38 @@ public class DailyWeatherService {
     private final DailyWeatherRepository dailyWeatherRepository;
     private final LocationRepository locationRepository;
 
-    public List<DailyWeather> getByLocation(Location location){
+    public List<DailyWeather> getByLocation(Location location) {
 
         String countryCode = location.getCountryCode();
         String cityName = location.getCityName();
 
-        Location locationInDB = locationRepository.findByCountryCodeAndCityName(countryCode,cityName);
+        Location locationInDB = locationRepository.findByCountryCodeAndCityName(countryCode, cityName);
 
-        if (locationInDB == null){
-            throw new LocationNotFoundException(countryCode,cityName);
+        if (locationInDB == null) {
+            throw new LocationNotFoundException(countryCode, cityName);
         }
 
         return dailyWeatherRepository.findByLocationCode(locationInDB.getCode());
+    }
 
+    public List<DailyWeather> getByLocationCode(String locationCode) {
+        Location location = locationRepository.findByCode(locationCode);
+        if (location == null) {
+            throw new LocationNotFoundException(locationCode);
+        }
+        return dailyWeatherRepository.findByLocationCode(locationCode);
+    }
 
-
+    public DailyWeather save(DailyWeatherDTO dto, String locationCode) {
+        Location location = locationRepository.findByCode(locationCode);
+        DailyWeather dailyWeather = new DailyWeather()
+                .location(location)
+                .maxTemp(dto.getMaxTemp())
+                .minTemp(dto.getMinTemp())
+                .dayOfMonth(dto.getDayOfMonth())
+                .month(dto.getMonth())
+                .precipitation(dto.getPrecipitation())
+                .status(dto.getStatus());
+        return dailyWeatherRepository.save(dailyWeather);
     }
 }

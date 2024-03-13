@@ -52,7 +52,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setTimestamp(new Date());
         errorDTO.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorDTO.addError(ERROR, HttpStatus.BAD_REQUEST.getReasonPhrase());
+        errorDTO.addError(ERROR, ex.getMessage());
         errorDTO.setPath(request.getServletPath());
 
         LOGGER_LOG.info(ex.getMessage(), ex);
