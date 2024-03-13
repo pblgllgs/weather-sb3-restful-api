@@ -1,5 +1,6 @@
 package com.pblgllgs.weatherapiservice.location;
 
+import com.pblgllgs.weatherapiservice.common.DailyWeather;
 import com.pblgllgs.weatherapiservice.common.HourlyWeather;
 import com.pblgllgs.weatherapiservice.common.Location;
 import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
@@ -168,5 +169,33 @@ class LocationRepositoryTests {
         String cityName = "TEST";
         Location lo = locationRepository.findByCountryCodeAndCityName(countryCode,cityName);
         assertThat(lo).isNull();
+    }
+
+    @Test
+    void testAddDailyWeatherData(){
+        Location location = locationRepository.findById("SCL").get();
+        List<DailyWeather> dailyWeatherList = location.getListDailyWeather();
+        DailyWeather forecast1 = new DailyWeather()
+                .location(location)
+                .dayOfMonth(16)
+                .month(7)
+                .minTemp(25)
+                .maxTemp(33)
+                .precipitation(20)
+                .status("Sunny");
+
+        DailyWeather forecast2 = new DailyWeather()
+                .location(location)
+                .dayOfMonth(17)
+                .month(7)
+                .minTemp(26)
+                .maxTemp(34)
+                .precipitation(10)
+                .status("Clear");
+
+        dailyWeatherList.addAll(List.of(forecast1,forecast2));
+        Location updatedLocation = locationRepository.save(location);
+
+        assertThat(updatedLocation.getListDailyWeather()).isNotEmpty();
     }
 }

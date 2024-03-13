@@ -102,8 +102,6 @@ H
 QWeatherApiClient/src/main/java/com/pblgllgs/weatherapiclient/client/Location.java,6\a\6a024ee85af0f4b032e4515b2f05ca1d17908c26
 ê
 `WeatherApiClient/src/main/java/com/pblgllgs/weatherapiclient/client/AddLocationAsJSONString.java,4\3\43dba67bbb08a8448d2895b54b303d861d66caba
-î
-dWeatherApiClient/src/main/java/com/pblgllgs/weatherapiclient/client/AddLocationAsLocationObject.java,8\6\86659bb33a86969378cd3cec4966ee0b77c49978
 å
 \WeatherApiClient/src/main/java/com/pblgllgs/weatherapiclient/client/GetLocationAsObject.java,2\3\237ba153948c0d0d4763f98c68ab3a0298bf6c68
 ê
@@ -148,8 +146,6 @@ H
 ]WeatherSpringMVC/src/main/java/com/pblgllgs/weatherspringmvc/WeatherSpringMvcApplication.java,9\d\9d504f61a975afb7f36d17990550504f35269766
 Ç
 RWeatherSpringMVC/src/main/java/com/pblgllgs/weatherspringmvc/config/AppConfig.java,6\7\67f21eb86752c7dcf956a735cb2b88dce695b2ad
-Å
-QWeatherSpringMVC/src/main/java/com/pblgllgs/weatherspringmvc/RealtimeWeather.java,6\3\635526c1baa2aace3393627b5da5466e567720b5
 â
 YWeatherSpringMVC/src/main/java/com/pblgllgs/weatherspringmvc/realtime/WeatherService.java,9\3\936c018de8fd5613554d93d9614d7b4ac2cc4fc8
 ä
@@ -158,3 +154,11 @@ ZWeatherSpringMVC/src/main/java/com/pblgllgs/weatherspringmvc/realtime/RealtimeW
 bWeatherSpringMVC/src/main/java/com/pblgllgs/weatherspringmvc/realtime/WeatherServiceException.java,d\a\da9ffd2a9391db4c7f1b36f6b2cfb762f44168a5
 å
 \WeatherSpringMVC/src/main/java/com/pblgllgs/weatherspringmvc/realtime/WeatherController.java,f\4\f422e257ddb9cb9d85e03fb14eb8e99ad2b48467
+â
+YWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/common/DailyWeatherId.java,4\8\48dcaf4c7f3bfc4a3a1560637c040dd61aeb602c
+á
+WWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/common/DailyWeather.java,e\2\e28cdc86a75966342ebfe2761a5257d1373725e7
+ê
+`WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherRepository.java,b\6\b695d49be47784316a9de6682a8e10e6c73a93b5
+ï
+eWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherRepositoryTests.java,e\4\e442645c41e55580e142d224507d7b9b329f0dd5
