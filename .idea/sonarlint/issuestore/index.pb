@@ -163,8 +163,6 @@ WWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/common/DailyWeat
 ï
 eWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherRepositoryTests.java,e\4\e442645c41e55580e142d224507d7b9b329f0dd5
 ç
-]WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DeilyWeatherService.java,2\5\25d9e2cca84de216617beba58acef3f9c5678379
-ç
 ]WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherService.java,b\0\b03334b85f4908dfd0e2ac1bcfe0badc6d261df5
 ì
 cWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherApiController.java,1\b\1b43c0d9385ae3857d780139c50632a44a7c5ac8
@@ -176,5 +174,3 @@ YWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeath
 hWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherApiControllerTests.java,9\7\9778b9f02ebdf7b47d6e1ae15d1466712125428b
 å
 \WeatherApiClient/src/main/java/com/pblgllgs/weatherapiclient/client/AddLocationAsObject.java,8\9\894bd74230380251c166e8f8f1b8bd9ce2761a44
-ç
-]WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherRequest.java,8\2\8252180b91142972fb53de075be0e47d402d64b8

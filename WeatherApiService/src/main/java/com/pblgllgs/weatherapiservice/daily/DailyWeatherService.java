@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,6 +37,33 @@ public class DailyWeatherService {
         }
 
         return dailyWeatherRepository.findByLocationCode(locationInDB.getCode());
+    }
+
+    public List<DailyWeather> updateByLocationCode(String code,List<DailyWeather> dailyWeatherInRequest){
+        Location location = locationRepository.findByCode(code);
+
+        if (location == null ){
+            throw new LocationNotFoundException(code);
+        }
+
+        for (DailyWeather data : dailyWeatherInRequest){
+            data.getId().setLocation(location);
+        }
+
+        List<DailyWeather> dailyWeatherInDB = location.getListDailyWeather();
+        List<DailyWeather> dailyWeathersToBeRemoved = new ArrayList<>();
+
+        for (DailyWeather forecast : dailyWeatherInDB){
+            if (!dailyWeatherInRequest.contains(forecast)){
+                dailyWeathersToBeRemoved.add(forecast.getShallowCopy());
+            }
+        }
+
+        for(DailyWeather forecastToBeRemoved : dailyWeathersToBeRemoved){
+            dailyWeatherInDB.remove(forecastToBeRemoved);
+        }
+
+        return (List<DailyWeather>)dailyWeatherRepository.saveAll(dailyWeatherInRequest) ;
     }
 
     public List<DailyWeather> getByLocationCode(String locationCode) {

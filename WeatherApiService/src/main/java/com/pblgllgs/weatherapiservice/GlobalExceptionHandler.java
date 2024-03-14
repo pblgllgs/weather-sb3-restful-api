@@ -67,7 +67,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setTimestamp(new Date());
         errorDTO.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorDTO.addError(ERROR, HttpStatus.BAD_REQUEST.getReasonPhrase());
+        errorDTO.addError(ERROR, ex.getMessage());
         errorDTO.setPath(request.getServletPath());
 
         LOGGER_LOG.info(ex.getMessage(), ex);
@@ -93,7 +93,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO handlerGenericBadRequestException(HttpServletRequest request, ConstraintViolationException ex) {
+    public ErrorDTO handlerConstraintViolationException(HttpServletRequest request, ConstraintViolationException ex) {
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setTimestamp(new Date());

@@ -30,11 +30,15 @@ public class WeatherApiServiceApplication {
                                 HourlyWeatherDTO.class,
                                 HourlyWeather.class
                         );
-        typeMap2.addMapping(src -> src.getHourOfDay(), (dest, value) -> dest.getId().setHourOfDay(value != null ?(int) value : 0));
+        typeMap2.addMapping(HourlyWeatherDTO::getHourOfDay, (dest, value) -> dest.getId().setHourOfDay(value != null ?(int) value : 0));
 
         TypeMap<DailyWeather, DailyWeatherDTO> typeMap3 = mapper.typeMap(DailyWeather.class, DailyWeatherDTO.class);
         typeMap3.addMapping(src -> src.getId().getDayOfMonth(),DailyWeatherDTO::setDayOfMonth);
         typeMap3.addMapping(src -> src.getId().getMonth(),DailyWeatherDTO::setMonth);
+
+        TypeMap<DailyWeatherDTO,DailyWeather> typeMap4 = mapper.typeMap(DailyWeatherDTO.class,DailyWeather.class);
+        typeMap4.addMapping(DailyWeatherDTO::getDayOfMonth,DailyWeather::dayOfMonth);
+        typeMap4.addMapping(DailyWeatherDTO::getMonth,DailyWeather::month);
 
         return mapper;
     }

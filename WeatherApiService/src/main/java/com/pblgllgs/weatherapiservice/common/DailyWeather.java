@@ -12,6 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "weather_daily")
 @Getter
@@ -31,37 +33,61 @@ public class DailyWeather {
     @Column(length = 50)
     private String status;
 
-    public DailyWeather precipitation(int precipitation){
+    public DailyWeather getShallowCopy() {
+        DailyWeather copy = new DailyWeather();
+        copy.setId(this.getId());
+        return copy;
+    }
+
+    public DailyWeather precipitation(int precipitation) {
         this.setPrecipitation(precipitation);
         return this;
     }
-    public DailyWeather status(String status){
+
+    public DailyWeather status(String status) {
         this.setStatus(status);
         return this;
     }
-    public DailyWeather location(Location location){
+
+    public DailyWeather location(Location location) {
         this.id.setLocation(location);
         return this;
     }
 
-    public DailyWeather dayOfMonth(int day){
+    public DailyWeather dayOfMonth(int day) {
         this.id.setDayOfMonth(day);
         return this;
     }
 
-    public DailyWeather month(int month){
+    public DailyWeather month(int month) {
         this.id.setMonth(month);
         return this;
     }
 
-    public DailyWeather minTemp(int temp){
+    public DailyWeather minTemp(int temp) {
         setMinTemp(temp);
         return this;
     }
 
-    public DailyWeather maxTemp(int temp){
+    public DailyWeather maxTemp(int temp) {
         setMaxTemp(temp);
         return this;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        DailyWeather other = (DailyWeather) obj;
+        return Objects.equals(id, other.id);
+    }
 }
