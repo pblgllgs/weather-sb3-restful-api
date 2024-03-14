@@ -56,7 +56,7 @@ public class HourlyWeatherService {
         for (HourlyWeather item: hourlyWeatherInRequest) {
             item.getId().setLocation(location);
         }
-        List<HourlyWeather> hourlyWeatherDB = location.getListHourlyWeathers();
+        List<HourlyWeather> hourlyWeatherDB = location.getListHourlyWeather();
         List<HourlyWeather> hourlyWeathersToBeRemoved =  new ArrayList<>();
 
         for (HourlyWeather item :  hourlyWeatherDB) {

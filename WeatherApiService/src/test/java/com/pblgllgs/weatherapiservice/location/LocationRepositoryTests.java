@@ -110,7 +110,7 @@ class LocationRepositoryTests {
     @Test
     void testHourlyWeatherData() {
         Location location = locationRepository.findById("MBMH_IN").get();
-        List<HourlyWeather> listHourlyWeathers = location.getListHourlyWeathers();
+        List<HourlyWeather> listHourlyWeathers = location.getListHourlyWeather();
         HourlyWeather forecast1 = new HourlyWeather().id(location, 8)
                 .temperature(20)
                 .precipitation(60)
@@ -126,14 +126,14 @@ class LocationRepositoryTests {
 
         Location updatedLocation = locationRepository.save(location);
 
-        assertThat(updatedLocation.getListHourlyWeathers()).isNotEmpty();
+        assertThat(updatedLocation.getListHourlyWeather()).isNotEmpty();
 
     }
 
     @Test
     void testHourlyWeatherData2() {
         Location location = locationRepository.findById("CL").get();
-        List<HourlyWeather> listHourlyWeathers = location.getListHourlyWeathers();
+        List<HourlyWeather> listHourlyWeathers = location.getListHourlyWeather();
         HourlyWeather forecast1 = new HourlyWeather().id(location, 8)
                 .temperature(10)
                 .precipitation(80)
@@ -149,7 +149,7 @@ class LocationRepositoryTests {
 
         Location updatedLocation = locationRepository.save(location);
 
-        assertThat(updatedLocation.getListHourlyWeathers()).isNotEmpty();
+        assertThat(updatedLocation.getListHourlyWeather()).isNotEmpty();
 
     }
 

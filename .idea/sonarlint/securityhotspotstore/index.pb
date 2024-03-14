@@ -1,6 +1,4 @@
 
-T
-$src/main/java/com/pblgllgs/Main.java,e\2\e27eb0b73d5dc799fee2782596b967fd58a2759e
 I
 WeatherApiService/HELP.md,c\a\caa66e9427313413c5ddb588ced50d9ec6b13498
 C
@@ -174,3 +172,15 @@ YWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/daily/DailyWeath
 hWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/daily/DailyWeatherApiControllerTests.java,9\7\9778b9f02ebdf7b47d6e1ae15d1466712125428b
 Œ
 \WeatherApiClient/src/main/java/com/pblgllgs/weatherapiclient/client/AddLocationAsObject.java,8\9\894bd74230380251c166e8f8f1b8bd9ce2761a44
+‹
+[WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/FullWeatherService.java,8\7\872f62f3f7b8ef12ceb31e1094165102fd43e921
+‡
+WWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/FullWeatherDTO.java,4\d\4deb1d21984e36d0fa59b1108e08246c282940eb
+‘
+aWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/FullWeatherApiController.java,1\0\109709b3e6e9828ba840cd1559f788d0277261b0
+–
+fWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/full/FullWeaatherApiControllerTest.java,0\8\0827b7ac4892c80d1690b33e10478ecf00c4cf4d
+•
+eWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/full/FullWeatherApiControllerTest.java,c\6\c6a1c09393f93a5b13fcfc9762e6536620affb25
+“
+cWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/RealtimeWeatherFieldFilter.java,8\1\818e72a92649641d2e667f62f85b6567fb420b09

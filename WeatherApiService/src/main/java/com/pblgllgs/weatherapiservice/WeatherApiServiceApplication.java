@@ -2,7 +2,9 @@ package com.pblgllgs.weatherapiservice;
 
 import com.pblgllgs.weatherapiservice.common.DailyWeather;
 import com.pblgllgs.weatherapiservice.common.HourlyWeather;
+import com.pblgllgs.weatherapiservice.common.Location;
 import com.pblgllgs.weatherapiservice.daily.DailyWeatherDTO;
+import com.pblgllgs.weatherapiservice.full.FullWeatherDTO;
 import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -10,6 +12,8 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.Locale;
 
 @SpringBootApplication
 public class WeatherApiServiceApplication {
@@ -37,9 +41,11 @@ public class WeatherApiServiceApplication {
         typeMap3.addMapping(src -> src.getId().getMonth(),DailyWeatherDTO::setMonth);
 
         TypeMap<DailyWeatherDTO,DailyWeather> typeMap4 = mapper.typeMap(DailyWeatherDTO.class,DailyWeather.class);
-        typeMap4.addMapping(DailyWeatherDTO::getDayOfMonth,DailyWeather::dayOfMonth);
-        typeMap4.addMapping(DailyWeatherDTO::getMonth,DailyWeather::month);
+        typeMap4.addMapping(src -> src.getDayOfMonth(),(dest, value) -> dest.getId().setDayOfMonth(value != null ?(int) value : 0));
+        typeMap4.addMapping(src -> src.getMonth(), (dest, value) -> dest.getId().setMonth(value != null ?(int) value : 0));
 
+        TypeMap<Location, FullWeatherDTO> typeMap5 = mapper.typeMap(Location.class, FullWeatherDTO.class);
+        typeMap5.addMapping(src -> src.toString(),FullWeatherDTO::setLocation);
         return mapper;
     }
 
