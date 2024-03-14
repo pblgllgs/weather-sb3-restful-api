@@ -178,8 +178,6 @@ hWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/daily/DailyWeath
 WWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/FullWeatherDTO.java,4\d\4deb1d21984e36d0fa59b1108e08246c282940eb
 ‘
 aWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/FullWeatherApiController.java,1\0\109709b3e6e9828ba840cd1559f788d0277261b0
-–
-fWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/full/FullWeaatherApiControllerTest.java,0\8\0827b7ac4892c80d1690b33e10478ecf00c4cf4d
 •
 eWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/full/FullWeatherApiControllerTest.java,c\6\c6a1c09393f93a5b13fcfc9762e6536620affb25
 “

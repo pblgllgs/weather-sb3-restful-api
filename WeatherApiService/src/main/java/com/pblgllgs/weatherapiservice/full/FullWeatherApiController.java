@@ -31,7 +31,6 @@ public class FullWeatherApiController {
 
     private final GeolocationService geolocationService;
     private final FullWeatherService fullWeatherService;
-    private final LocationService locationService;
     private final ModelMapper modelMapper;
 
     @GetMapping
