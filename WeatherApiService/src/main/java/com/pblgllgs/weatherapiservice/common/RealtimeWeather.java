@@ -2,6 +2,7 @@ package com.pblgllgs.weatherapiservice.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;

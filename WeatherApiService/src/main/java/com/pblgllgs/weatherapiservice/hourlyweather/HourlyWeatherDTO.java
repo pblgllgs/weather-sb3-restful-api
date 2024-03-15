@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Range;
 
 public class HourlyWeatherDTO {
     @JsonProperty("hour_of_day")
+    @Range(min = 0,max = 23, message = "Hour of day must be in the range -1 to 24")
     private int hourOfDay;
     @Range(min = -50,max = 50, message = "Temperature must be in the range -50 to 50 C°")
     private int temperature;

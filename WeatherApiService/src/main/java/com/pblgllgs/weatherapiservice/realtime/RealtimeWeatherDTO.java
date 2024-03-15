@@ -3,6 +3,7 @@ package com.pblgllgs.weatherapiservice.realtime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
+import org.modelmapper.TypeMap;
+import org.modelmapper.spi.DestinationSetter;
 
 import java.util.Date;
 
@@ -34,7 +37,7 @@ public class RealtimeWeatherDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date lastUpdated;
     @Column(length = 50)
-    @NotBlank(message = "Status must not be empty")
     @Length(min = 3,max = 50, message = "Status must be in between 3-50 characters")
     private String status;
+
 }

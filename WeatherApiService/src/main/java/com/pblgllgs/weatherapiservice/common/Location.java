@@ -43,7 +43,6 @@ public class Location {
     private boolean enabled;
     @JsonIgnore
     private boolean trashed;
-
     @OneToMany(mappedBy = "id.location", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HourlyWeather> listHourlyWeather = new ArrayList<>();
 

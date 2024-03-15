@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pblgllgs.weatherapiservice.daily.DailyWeatherDTO;
 import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherDTO;
 import com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherDTO;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,9 +28,12 @@ public class FullWeatherDTO {
     private String location;
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = RealtimeWeatherFieldFilter.class)
     @JsonProperty("realtime_weather")
+    @Valid
     private RealtimeWeatherDTO realtimeWeather = new RealtimeWeatherDTO();
     @JsonProperty("hourly_forecast")
+    @Valid
     private List<HourlyWeatherDTO> listHourlyWeather = new ArrayList<>();
     @JsonProperty("daily_forecast")
+    @Valid
     private List<DailyWeatherDTO> listDailyWeather = new ArrayList<>();
 }

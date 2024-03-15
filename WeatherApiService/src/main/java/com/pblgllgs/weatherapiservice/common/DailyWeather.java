@@ -6,6 +6,7 @@ package com.pblgllgs.weatherapiservice.common;
  *
  */
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

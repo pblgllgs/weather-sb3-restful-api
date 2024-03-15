@@ -229,7 +229,11 @@ class DailyWeatherApiControllerTests {
 
         mockMvc.perform(put(requestURI).contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$.errors", containsString("Day of the month must be between 1-31")))
+                .andExpect(jsonPath("$.errors", is(
+                        Map.of(
+                                "updateDailyForecast.listDto[0].dayOfMonth","Day of the month must be between 1-31",
+                                "updateDailyForecast.listDto[1].dayOfMonth","Day of the month must be between 1-31"
+                        ))))
                 .andDo(print());
     }
 

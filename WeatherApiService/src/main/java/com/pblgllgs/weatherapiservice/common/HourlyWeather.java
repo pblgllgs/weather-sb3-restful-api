@@ -19,7 +19,6 @@ public class HourlyWeather {
     private String status;
 
 
-
     public HourlyWeatherId getId() {
         return id;
     }
@@ -52,30 +51,33 @@ public class HourlyWeather {
         this.status = status;
     }
 
-    public HourlyWeather temperature(int temp){
+    public HourlyWeather temperature(int temp) {
         setTemperature(temp);
         return this;
     }
 
-    public HourlyWeather id(Location location, int hour){
+    public HourlyWeather id(Location location, int hour) {
         this.id.setHourOfDay(hour);
         this.id.setLocation(location);
         return this;
     }
-    public HourlyWeather precipitation(int precipitation){
+
+    public HourlyWeather precipitation(int precipitation) {
         this.setPrecipitation(precipitation);
         return this;
     }
-    public HourlyWeather status(String status){
+
+    public HourlyWeather status(String status) {
         this.setStatus(status);
         return this;
     }
-    public HourlyWeather location(Location location){
+
+    public HourlyWeather location(Location location) {
         this.id.setLocation(location);
         return this;
     }
 
-    public HourlyWeather hourOfDay( int hour){
+    public HourlyWeather hourOfDay(int hour) {
         this.id.setHourOfDay(hour);
         return this;
     }
@@ -103,7 +105,7 @@ public class HourlyWeather {
         return Objects.hash(id);
     }
 
-    public HourlyWeather getShallowCopy(){
+    public HourlyWeather getShallowCopy() {
         HourlyWeather copy = new HourlyWeather();
         copy.setId(this.getId());
         return copy;
