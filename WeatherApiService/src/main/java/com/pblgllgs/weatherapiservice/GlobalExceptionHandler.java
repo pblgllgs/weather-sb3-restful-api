@@ -4,8 +4,7 @@ import com.pblgllgs.weatherapiservice.location.LocationNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,9 +23,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.*;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
-    private static final Logger LOGGER_LOG = LoggerFactory.getLogger((GlobalExceptionHandler.class));
 
     private static final String ERROR = "Error";
 
@@ -34,75 +32,45 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorDTO handlerGenericException(HttpServletRequest request, Exception ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setTimestamp(new Date());
-        errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorDTO.addError(ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-        errorDTO.setPath(request.getServletPath());
-
-        LOGGER_LOG.info(ex.getMessage(), ex);
-
-        return errorDTO;
+        Map<String, String> errors = Map.of(ERROR, ex.getMessage());
+        return getErrorDTO(request, HttpStatus.INTERNAL_SERVER_ERROR, errors);
     }
 
     @ExceptionHandler(GeolocationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorDTO handlerGeolocationException(HttpServletRequest request, GeolocationException ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setTimestamp(new Date());
-        errorDTO.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorDTO.addError(ERROR, ex.getMessage());
-        errorDTO.setPath(request.getServletPath());
+        Map<String, String> errors = Map.of(ERROR, ex.getMessage());
 
-        LOGGER_LOG.info(ex.getMessage(), ex);
-
-        return errorDTO;
+        return getErrorDTO(request, HttpStatus.BAD_REQUEST, errors);
     }
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorDTO handlerGenericBadRequestException(HttpServletRequest request, BadRequestException ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setTimestamp(new Date());
-        errorDTO.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorDTO.addError(ERROR, ex.getMessage());
-        errorDTO.setPath(request.getServletPath());
+        Map<String, String> errors = Map.of(ERROR, ex.getMessage());
 
-        LOGGER_LOG.info(ex.getMessage(), ex);
-
-        return errorDTO;
+        return getErrorDTO(request, HttpStatus.BAD_REQUEST, errors);
     }
 
     @ExceptionHandler(LocationNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorDTO handlerLocationNotFoundException(HttpServletRequest request, LocationNotFoundException ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
-        errorDTO.setTimestamp(new Date());
-        errorDTO.setStatus(HttpStatus.NOT_FOUND.value());
-        errorDTO.addError(ERROR, ex.getMessage());
-        errorDTO.setPath(request.getServletPath());
+        Map<String, String> errors = Map.of(ERROR, ex.getMessage());
 
-        LOGGER_LOG.info(ex.getMessage(), ex);
-
-        return errorDTO;
+        return getErrorDTO(request, HttpStatus.NOT_FOUND, errors);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ErrorDTO handlerConstraintViolationException(HttpServletRequest request, ConstraintViolationException ex) {
-        Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
+    private static ErrorDTO getErrorDTO(HttpServletRequest request, HttpStatus status, Map<String, String> errors) {
+
+        log.info(errors.toString());
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setTimestamp(new Date());
-        errorDTO.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorDTO.setErrors(extractErrorsConstraint(constraintViolations));
+        errorDTO.setStatus(status.value());
+        errorDTO.setErrors(errors);
         errorDTO.setPath(request.getServletPath());
-
-        LOGGER_LOG.info(ex.getMessage(), ex);
-
         return errorDTO;
     }
 
@@ -118,6 +86,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorDTO.setTimestamp(new Date());
         errorDTO.setPath(((ServletWebRequest) request).getRequest().getServletPath());
         errorDTO.setErrors(extractErrors(ex.getBindingResult().getFieldErrors()));
+        log.info(extractErrors(ex.getBindingResult().getFieldErrors()).toString());
         return new ResponseEntity<>(errorDTO, headers, status);
     }
 
@@ -127,14 +96,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return errorsMap;
     }
 
-    private Map<String, String> extractErrorsConstraint(Set<ConstraintViolation<?>> constraintViolations) {
-        Map<String, String> errorsMap = new HashMap<>();
-        constraintViolations.forEach(
-                constraintViolation -> errorsMap.put(
-                        constraintViolation.getPropertyPath().toString(),
-                        constraintViolation.getMessage()
-                )
-        );
-        return errorsMap;
-    }
 }

@@ -1,3 +1,5 @@
 
 “
-java:S1206"PThis class overrides "equals()" and should therefore also override "hashCode()".(ÜÑã8î¸İóã1J$08351d1e-3a62-4bda-9c55-42b59d1b7b47
+java:S1206"PThis class overrides "equals()" and should therefore also override "hashCode()".(’ÜÇŞ8¥ş¼•ä1J$a24c0ba7-2ab8-44c8-bf32-e0668056eb15
+k
+java:S6201"OReplace this instanceof check and cast with 'instanceof RealtimeWeatherDTO dto'(úáÉ:8ì®À•ä1

@@ -1,3 +1,7 @@
 
-…
-java:S1612,"=Replace this lambda with method reference 'Object::toString'.(§„¡şÿÿÿÿ8µ©Òüã1J$b2ab77d3-e6f8-454e-b22e-2c94a8f2ed6d
+€
+java:S1612/"=Replace this lambda with method reference 'Object::toString'.(Òøî›8ı™½”ä1J$86d60eb8-ddc6-406a-b8f3-ff5e683c0561
+“
+java:S16128"KReplace this lambda with method reference 'DailyWeatherDTO::getDayOfMonth'.(á×›Ùşÿÿÿÿ8ÿ™½”ä1J$f8a61913-12b8-49d5-8674-c79b78de0b05
+
+java:S1612<"FReplace this lambda with method reference 'DailyWeatherDTO::getMonth'.(á×›Ùşÿÿÿÿ8€š½”ä1J$34c9d81b-b529-44ed-b96d-7beaa2fa46c2

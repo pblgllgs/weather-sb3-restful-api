@@ -3,9 +3,17 @@ package com.pblgllgs.weatherapiservice.hourlyweather;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class HourlyWeatherDTO {
     @JsonProperty("hour_of_day")
     @Range(min = 0,max = 23, message = "Hour of day must be in the range -1 to 24")
@@ -17,38 +25,6 @@ public class HourlyWeatherDTO {
     @NotBlank(message = "Status must not be empty")
     @Length(min = 3,max = 50, message = "Status must be in between 3-50 characters")
     private String status;
-
-    public int getHourOfDay() {
-        return hourOfDay;
-    }
-
-    public void setHourOfDay(int hourOfDay) {
-        this.hourOfDay = hourOfDay;
-    }
-
-    public int getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(int temperture) {
-        this.temperature = temperture;
-    }
-
-    public int getPrecipitation() {
-        return precipitation;
-    }
-
-    public void setPrecipitation(int precipitation) {
-        this.precipitation = precipitation;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public HourlyWeatherDTO precipitation(int precipitation) {
         this.setPrecipitation(precipitation);

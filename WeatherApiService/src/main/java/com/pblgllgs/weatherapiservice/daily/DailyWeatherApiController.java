@@ -79,16 +79,16 @@ public class DailyWeatherApiController {
             @RequestBody @Valid List<DailyWeatherDTO> listDto
     ) throws BadRequestException {
         if (listDto.isEmpty()) {
-            throw new BadRequestException("Daily forecast data can´t be empty");
+            throw new BadRequestException("Daily forecast data can't be empty");
         }
 
         log.info("============DTO=============");
-        listDto.forEach( dto -> log.info(String.valueOf(dto.toString())));
+        listDto.forEach(dto -> log.info(String.valueOf(dto.toString())));
 
         List<DailyWeather> dailyWeathers = listDTOToListEntity(listDto);
 
         log.info("===========ENTITY==============");
-        dailyWeathers.forEach( dto -> log.info(String.valueOf(dto.toString())));
+        dailyWeathers.forEach(dto -> log.info(String.valueOf(dto.toString())));
 
         List<DailyWeather> updatedForecast = dailyWeatherService.updateByLocationCode(code, dailyWeathers);
 
@@ -97,9 +97,9 @@ public class DailyWeatherApiController {
 
     private List<DailyWeather> listDTOToListEntity(List<DailyWeatherDTO> listDto) {
         List<DailyWeather> list = new ArrayList<>();
-        listDto.forEach( dto -> {
+        listDto.forEach(dto -> {
             DailyWeather dailyWeather = DailyWeather.builder()
-                    .id(genId(dto.getDayOfMonth(),dto.getMonth()))
+                    .id(genId(dto.getDayOfMonth(), dto.getMonth()))
                     .maxTemp(dto.getMaxTemp())
                     .minTemp(dto.getMinTemp())
                     .precipitation(dto.getPrecipitation())

@@ -139,6 +139,20 @@ public class Location {
         this.listHourlyWeather = listHourlyWeather;
     }
 
+    public void copyFieldsFrom(Location another) {
+        setCityName(another.getCityName());
+        setRegionName(another.getRegionName());
+        setCountryCode(another.getCountryCode());
+        setCountryName(another.getCountryName());
+        setEnabled(another.isEnabled());
+    }
+
+    public void copyAllFieldsFrom(Location another) {
+        copyFieldsFrom(another);
+        setCode(another.getCode());
+        setTrashed(another.isTrashed());
+    }
+
     public Location code(String code) {
         setCode(code);
         return this;

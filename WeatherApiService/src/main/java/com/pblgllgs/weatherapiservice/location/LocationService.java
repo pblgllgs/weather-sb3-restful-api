@@ -1,5 +1,6 @@
 package com.pblgllgs.weatherapiservice.location;
 
+import com.pblgllgs.weatherapiservice.AbstractLocationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.pblgllgs.weatherapiservice.common.Location;
@@ -7,29 +8,20 @@ import com.pblgllgs.weatherapiservice.common.Location;
 import java.util.List;
 
 @Service
-public class LocationService {
+@Transactional
+public class LocationService extends AbstractLocationService {
 
-    private final LocationRepository repository;
-
-    public LocationService(LocationRepository repository) {
-        this.repository = repository;
+    public LocationService(LocationRepository locationRepository) {
+        super();
+        this.locationRepository = locationRepository;
     }
 
     public Location add(Location location) {
-        return repository.save(location);
+        return locationRepository.save(location);
     }
     @Transactional(readOnly = true)
     public List<Location> list() {
-        return repository.findUntrashed();
-    }
-
-    @Transactional(readOnly = true)
-    public Location getLocation(String code) throws LocationNotFoundException {
-        Location location = repository.findByCode(code);
-        if (location == null){
-            throw new LocationNotFoundException(code);
-        }
-        return location;
+        return locationRepository.findUntrashed();
     }
 
     @Transactional
@@ -39,12 +31,8 @@ public class LocationService {
         if (locationInDB == null) {
             throw new LocationNotFoundException(code);
         }
-        locationInDB.setCountryName(locationInRequest.getCountryName());
-        locationInDB.setCountryCode(locationInRequest.getCountryCode());
-        locationInDB.setRegionName(locationInRequest.getRegionName());
-        locationInDB.setCityName(locationInRequest.getCityName());
-        locationInDB.setEnabled(locationInRequest.isEnabled());
-        return repository.save(locationInDB);
+        locationInDB.copyFieldsFrom(locationInRequest);
+        return locationRepository.save(locationInDB);
     }
 
     @Transactional
@@ -53,6 +41,6 @@ public class LocationService {
         if (location == null) {
             throw new LocationNotFoundException(code);
         }
-        repository.trashByCode(code);
+        locationRepository.trashByCode(code);
     }
 }

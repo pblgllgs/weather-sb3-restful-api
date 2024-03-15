@@ -1,12 +1,12 @@
 package com.pblgllgs.weatherapiservice.full;
 
+import com.pblgllgs.weatherapiservice.AbstractLocationService;
 import com.pblgllgs.weatherapiservice.common.DailyWeather;
 import com.pblgllgs.weatherapiservice.common.HourlyWeather;
 import com.pblgllgs.weatherapiservice.common.Location;
 import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import com.pblgllgs.weatherapiservice.location.LocationNotFoundException;
 import com.pblgllgs.weatherapiservice.location.LocationRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,10 +19,11 @@ import java.util.List;
  *
  */
 @Service
-@RequiredArgsConstructor
-public class FullWeatherService {
-
-    private final LocationRepository locationRepository;
+public class FullWeatherService extends AbstractLocationService {
+    public FullWeatherService(LocationRepository locationRepository) {
+        super();
+        this.locationRepository = locationRepository;
+    }
 
     public Location getByLocation(Location locationFromIp) {
         String cityName = locationFromIp.getCityName();
@@ -30,14 +31,6 @@ public class FullWeatherService {
         Location locationInDB = locationRepository.findByCountryCodeAndCityName(countryCode, cityName);
         if (locationInDB == null) {
             throw new LocationNotFoundException(countryCode, cityName);
-        }
-        return locationInDB;
-    }
-
-    public Location getByLocationCode(String locationFromCode) {
-        Location locationInDB = locationRepository.findByCode(locationFromCode);
-        if (locationInDB == null) {
-            throw new LocationNotFoundException(locationFromCode);
         }
         return locationInDB;
     }
@@ -51,26 +44,32 @@ public class FullWeatherService {
         realtimeWeather.setLocation(locationInDB);
         realtimeWeather.setLastUpdated(new Date());
 
-        if (locationInDB.getRealtimeWeather() == null){
-            locationInDB.setRealtimeWeather(realtimeWeather);
+        setLocationForWeatherData(locationInRequest, locationInDB);
+
+        saveRealtimeWeatherIfNotExistsBefore(locationInRequest, locationInDB);
+
+        locationInRequest.copyAllFieldsFrom(locationInDB);
+
+        return locationRepository.save(locationInRequest);
+    }
+
+    private void saveRealtimeWeatherIfNotExistsBefore(Location locationInRequest, Location locationInDB) {
+        if (locationInDB.getRealtimeWeather() == null) {
+            locationInDB.setRealtimeWeather(locationInRequest.getRealtimeWeather());
             locationRepository.save(locationInDB);
         }
+    }
+
+    private static void setLocationForWeatherData(Location locationInRequest, Location locationInDB) {
+        RealtimeWeather realtimeWeather = locationInRequest.getRealtimeWeather();
+        realtimeWeather.setLocation(locationInDB);
+        realtimeWeather.setLastUpdated(new Date());
 
         List<DailyWeather> listDailyWeather = locationInRequest.getListDailyWeather();
         listDailyWeather.forEach(dw -> dw.getId().setLocation(locationInDB));
 
         List<HourlyWeather> listHourlyWeather = locationInRequest.getListHourlyWeather();
         listHourlyWeather.forEach(hw -> hw.getId().setLocation(locationInDB));
-
-        locationInRequest.setCode(locationInDB.getCode());
-        locationInRequest.setCityName(locationInDB.getCityName());
-        locationInRequest.setRegionName(locationInDB.getRegionName());
-        locationInRequest.setCountryCode(locationInDB.getCountryCode());
-        locationInRequest.setCountryName(locationInDB.getCountryName());
-        locationInRequest.setEnabled(locationInDB.isEnabled());
-        locationInRequest.setTrashed(locationInDB.isTrashed());
-
-        return locationRepository.save(locationInRequest);
     }
 
 

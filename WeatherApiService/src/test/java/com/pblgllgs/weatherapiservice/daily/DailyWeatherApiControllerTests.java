@@ -198,7 +198,7 @@ class DailyWeatherApiControllerTests {
 
         mockMvc.perform(put(requestURI).contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors", is(Map.of("Error", "Daily forecast data can´t be empty"))))
+                .andExpect(jsonPath("$.errors", is(Map.of("Error", "Daily forecast data can't be empty"))))
                 .andDo(print());
     }
 

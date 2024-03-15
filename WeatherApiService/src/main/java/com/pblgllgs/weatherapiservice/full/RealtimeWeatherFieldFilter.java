@@ -9,9 +9,9 @@ package com.pblgllgs.weatherapiservice.full;
 import com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherDTO;
 
 public class RealtimeWeatherFieldFilter {
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof RealtimeWeatherDTO dto) {
+    public boolean equals(Object object) {
+        if (object instanceof RealtimeWeatherDTO) {
+            RealtimeWeatherDTO dto = (RealtimeWeatherDTO) object;
             return dto.getStatus() == null;
         }
         return false;

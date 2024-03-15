@@ -44,8 +44,8 @@ public class FullWeatherApiController {
     @GetMapping("/{locationCode}")
     public ResponseEntity<FullWeatherDTO> getFullWeatherByLocationCode(
             @PathVariable("locationCode") String locationCode) {
-        Location locationByLocationCodeInDB = fullWeatherService.getByLocationCode(locationCode);
-        return ResponseEntity.ok().body(entityToDTO(locationByLocationCodeInDB));
+        Location locationByLocationCodeInDB = fullWeatherService.getLocation(locationCode);
+        return ResponseEntity.ok(entityToDTO(locationByLocationCodeInDB));
     }
 
     @PutMapping("/{locationCode}")

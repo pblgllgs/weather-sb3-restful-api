@@ -182,3 +182,5 @@ aWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/FullWeather
 eWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/full/FullWeatherApiControllerTest.java,c\6\c6a1c09393f93a5b13fcfc9762e6536620affb25
 “
 cWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/RealtimeWeatherFieldFilter.java,8\1\818e72a92649641d2e667f62f85b6567fb420b09
+‹
+[WeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/AbstractLocationService.java,7\d\7dc55807ce36fcaae8b0b899d8a28687b7b7f5b4
