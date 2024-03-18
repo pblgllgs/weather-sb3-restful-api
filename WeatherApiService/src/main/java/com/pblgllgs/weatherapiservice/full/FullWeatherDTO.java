@@ -12,25 +12,23 @@ import com.pblgllgs.weatherapiservice.daily.DailyWeatherDTO;
 import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherDTO;
 import com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherDTO;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FullWeatherDTO {
+public class FullWeatherDTO extends RepresentationModel<FullWeatherDTO> {
     private String location;
     @JsonInclude(
             value = JsonInclude.Include.CUSTOM,
             valueFilter = RealtimeWeatherFieldFilter.class
     )
-    @JsonProperty("realtime_weather")
     @Valid
     private RealtimeWeatherDTO realtimeWeather = new RealtimeWeatherDTO();
     @JsonProperty("hourly_forecast")

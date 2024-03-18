@@ -40,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DailyWeatherApiControllerTests {
 
     private static final String END_POINT_PATH = "/v1/daily";
+
+    public static final String APPLICATION_HAL_JSON = "application/hal+json";
     @Autowired
     private MockMvc mockMvc;
 
@@ -119,9 +121,13 @@ class DailyWeatherApiControllerTests {
 
         mockMvc.perform(get(END_POINT_PATH))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
                 .andExpect(jsonPath("$.location", is(expectedLocation)))
                 .andExpect(jsonPath("$.daily_forecast[0].day_of_month", is(16)))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/daily")))
+                .andExpect(jsonPath("$._links.realtime_weather.href",is("http://localhost/v1/realtime")))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly")))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full")))
                 .andDo(print());
     }
 
@@ -183,9 +189,13 @@ class DailyWeatherApiControllerTests {
 
         mockMvc.perform(get(requestURI))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
                 .andExpect(jsonPath("$.location", is(expectedLocation)))
                 .andExpect(jsonPath("$.daily_forecast[0].day_of_month", is(16)))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/daily/"+locationCode)))
+                .andExpect(jsonPath("$._links.realtime_weather.href",is("http://localhost/v1/realtime/"+locationCode)))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly/"+locationCode)))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full/"+locationCode)))
                 .andDo(print());
     }
 
@@ -229,11 +239,8 @@ class DailyWeatherApiControllerTests {
 
         mockMvc.perform(put(requestURI).contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors", is(
-                        Map.of(
-                                "updateDailyForecast.listDto[0].dayOfMonth","Day of the month must be between 1-31",
-                                "updateDailyForecast.listDto[1].dayOfMonth","Day of the month must be between 1-31"
-                        ))))
+                .andExpect(jsonPath("$.errors.Error",
+                        containsString("updateDailyForecast.listDto[0].dayOfMonth: Day of the month must be between 1-31, updateDailyForecast.listDto[1].dayOfMonth: Day of the month must be between 1-31")))
                 .andDo(print());
     }
 
@@ -320,10 +327,14 @@ class DailyWeatherApiControllerTests {
                                         Mockito.anyList()
                                 )
         ).thenReturn(dailyWeatherList);
-        mockMvc.perform(put(requestURI).contentType(MediaType.APPLICATION_JSON).content(requestBody))
+        mockMvc.perform(put(requestURI).contentType(APPLICATION_HAL_JSON).content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.location", is(location.toString())))
                 .andExpect(jsonPath("$.daily_forecast[0].day_of_month", is(17)))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/daily/"+locationCode)))
+                .andExpect(jsonPath("$._links.realtime_weather.href",is("http://localhost/v1/realtime/"+locationCode)))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly/"+locationCode)))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full/"+locationCode)))
                 .andDo(print());
     }
 }

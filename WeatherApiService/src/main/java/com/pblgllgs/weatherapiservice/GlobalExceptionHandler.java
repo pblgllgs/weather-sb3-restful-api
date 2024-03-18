@@ -33,7 +33,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     public ErrorDTO handlerGenericException(HttpServletRequest request, Exception ex) {
         Map<String, String> errors = Map.of(ERROR, ex.getMessage());
+        log.info("aca");
         return getErrorDTO(request, HttpStatus.INTERNAL_SERVER_ERROR, errors);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorDTO handlerConstraintViolationException(HttpServletRequest request, ConstraintViolationException ex) {
+        Map<String, String> errors = Map.of(ERROR, ex.getMessage());
+
+        return getErrorDTO(request, HttpStatus.BAD_REQUEST, errors);
     }
 
     @ExceptionHandler(GeolocationException.class)

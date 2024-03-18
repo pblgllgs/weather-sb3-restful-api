@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -43,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class FullWeatherApiControllerTest {
 
     private static final String END_POINT_PATH = "/v1/full";
+    private static final String APPLICATION_HAL_JSON = "application/hal+json";
     @Autowired
     private MockMvc mockMvc;
 
@@ -50,6 +52,7 @@ class FullWeatherApiControllerTest {
     private FullWeatherService fullWeatherServiceMock;
     @MockBean
     private GeolocationService locationServiceMock;
+    @SpyBean private FullWeatherModelAssembler modelAssembler;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -141,11 +144,12 @@ class FullWeatherApiControllerTest {
 
         mockMvc.perform(get(END_POINT_PATH))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
                 .andExpect(jsonPath("$.location", is(expectedLocation)))
                 .andExpect(jsonPath("$.realtime_weather.temperature", is(15)))
                 .andExpect(jsonPath("$.hourly_forecast[0].hour_of_day", is(10)))
                 .andExpect(jsonPath("$.daily_forecast[1].day_of_month", is(17)))
+                .andExpect(jsonPath("$._links.self.href", is("http://localhost/v1/full")))
                 .andDo(print());
     }
 
@@ -155,7 +159,7 @@ class FullWeatherApiControllerTest {
         String requestURI = END_POINT_PATH + "/" + locationCode;
 
         LocationNotFoundException ex = new LocationNotFoundException(locationCode);
-        when(fullWeatherServiceMock.getByLocationCode(locationCode)).thenThrow(ex);
+        when(fullWeatherServiceMock.getLocation(locationCode)).thenThrow(ex);
 
         mockMvc.perform(get(requestURI))
                 .andExpect(status().isNotFound())
@@ -164,7 +168,7 @@ class FullWeatherApiControllerTest {
     }
 
     @Test
-    void testGetByCodeShouldReturn200OK() throws Exception {
+    void testGetByLocationCodeShouldReturn200OK() throws Exception {
 
         String locationCode = "NYC_US";
         String requestURI = END_POINT_PATH + "/" + locationCode;
@@ -221,17 +225,18 @@ class FullWeatherApiControllerTest {
 
         location.setListHourlyWeather(List.of(hourlyForecast1, hourlyForecast2));
 
-        when(fullWeatherServiceMock.getByLocationCode(locationCode)).thenReturn(location);
+        when(fullWeatherServiceMock.getLocation(locationCode)).thenReturn(location);
 
         String expectedLocation = location.toString();
 
         mockMvc.perform(get(requestURI))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
                 .andExpect(jsonPath("$.location", is(expectedLocation)))
                 .andExpect(jsonPath("$.realtime_weather.temperature", is(15)))
                 .andExpect(jsonPath("$.hourly_forecast[0].hour_of_day", is(10)))
                 .andExpect(jsonPath("$.daily_forecast[1].day_of_month", is(17)))
+                .andExpect(jsonPath("$._links.self.href", is("http://localhost/v1/full/"+location.getCode())))
                 .andDo(print());
     }
 
@@ -557,6 +562,7 @@ class FullWeatherApiControllerTest {
 
         mockMvc.perform(put(requestURI).contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
                 .andExpect(jsonPath("$.realtime_weather.temperature", is(25)))
                 .andExpect(jsonPath("$.hourly_forecast[0].hour_of_day", is(22)))
                 .andExpect(jsonPath("$.daily_forecast[0].day_of_month", is(25)))

@@ -10,11 +10,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /*
  *
@@ -32,20 +36,25 @@ public class FullWeatherApiController {
     private final GeolocationService geolocationService;
     private final FullWeatherService fullWeatherService;
     private final ModelMapper modelMapper;
+    private final FullWeatherModelAssembler fullWeatherModelAssembler;
 
     @GetMapping
-    public ResponseEntity<FullWeatherDTO> getFullWeatherByIPAddress(HttpServletRequest request) throws GeolocationException, IOException {
+    public ResponseEntity<EntityModel<FullWeatherDTO>> getFullWeatherByIPAddress(
+            HttpServletRequest request
+    ) throws GeolocationException, IOException {
         String ipAddress = CommonUtility.getIPAddress(request);
         Location locationFromIP = geolocationService.getLocation(ipAddress);
         Location locationByIPAddressInDB = fullWeatherService.getByLocation(locationFromIP);
-        return ResponseEntity.ok(entityToDTO(locationByIPAddressInDB));
+        FullWeatherDTO dto = entityToDTO(locationByIPAddressInDB);
+        return ResponseEntity.ok(fullWeatherModelAssembler.toModel(dto));
     }
 
     @GetMapping("/{locationCode}")
-    public ResponseEntity<FullWeatherDTO> getFullWeatherByLocationCode(
+    public ResponseEntity<EntityModel<FullWeatherDTO>> getFullWeatherByLocationCode(
             @PathVariable("locationCode") String locationCode) {
         Location locationByLocationCodeInDB = fullWeatherService.getLocation(locationCode);
-        return ResponseEntity.ok(entityToDTO(locationByLocationCodeInDB));
+        FullWeatherDTO fullWeatherDTO = entityToDTO(locationByLocationCodeInDB);
+        return ResponseEntity.ok(addLinksByLocationCode(fullWeatherDTO,locationCode));
     }
 
     @PutMapping("/{locationCode}")
@@ -76,5 +85,11 @@ public class FullWeatherApiController {
 
     private Location dtoToEntity(FullWeatherDTO dto) {
         return modelMapper.map(dto, Location.class);
+    }
+
+    private EntityModel<FullWeatherDTO> addLinksByLocationCode(FullWeatherDTO dto, String locationCode) {
+        return EntityModel.of(dto)
+                .add(linkTo(methodOn(FullWeatherApiController.class).getFullWeatherByLocationCode(locationCode))
+                        .withSelfRel());
     }
 }

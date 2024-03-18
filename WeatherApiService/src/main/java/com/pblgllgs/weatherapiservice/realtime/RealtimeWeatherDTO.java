@@ -6,22 +6,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.modelmapper.TypeMap;
 import org.modelmapper.spi.DestinationSetter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RealtimeWeatherDTO {
+public class RealtimeWeatherDTO extends RepresentationModel<RealtimeWeatherDTO> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String location;
     @Range(min = -50,max = 50, message = "Temperature must be in the range -50 to 50 C°")
@@ -30,10 +29,8 @@ public class RealtimeWeatherDTO {
     private int humidity;
     @Range(min = 0,max = 100, message = "Precipitation must be in the range 0 to 100 percentage")
     private int precipitation;
-    @JsonProperty("wind_speed")
     @Range(min = 0,max = 200, message = "Wind speed must be in the range 0 to 200 km/h")
     private int windSpeed;
-    @JsonProperty("last_updated")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date lastUpdated;
     @Column(length = 50)

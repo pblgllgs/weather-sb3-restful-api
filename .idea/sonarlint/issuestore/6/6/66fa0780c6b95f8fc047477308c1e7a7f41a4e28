@@ -1,7 +1,9 @@
 
 €
-java:S1612/"=Replace this lambda with method reference 'Object::toString'.(Òøî›8ý™½”ä1J$86d60eb8-ddc6-406a-b8f3-ff5e683c0561
+java:S16122"=Replace this lambda with method reference 'Object::toString'.(Òøî›8º‘¤–å1J$dedcea8a-0c17-4791-9670-52a6b03916c3
 “
-java:S16128"KReplace this lambda with method reference 'DailyWeatherDTO::getDayOfMonth'.(á×›Ùþÿÿÿÿ8ÿ™½”ä1J$f8a61913-12b8-49d5-8674-c79b78de0b05
+java:S1612;"KReplace this lambda with method reference 'DailyWeatherDTO::getDayOfMonth'.(á×›Ùþÿÿÿÿ8½‘¤–å1J$325f1c6c-828a-485b-b46f-402ce0e140d9
 Ž
-java:S1612<"FReplace this lambda with method reference 'DailyWeatherDTO::getMonth'.(á×›Ùþÿÿÿÿ8€š½”ä1J$34c9d81b-b529-44ed-b96d-7beaa2fa46c2
+java:S1612?"FReplace this lambda with method reference 'DailyWeatherDTO::getMonth'.(á×›Ùþÿÿÿÿ8½‘¤–å1J$02ecbbe5-645b-4289-9834-09cb213638cd
+u
+java:S1874I"2Remove this use of "SNAKE_CASE"; it is deprecated.(ŸŽüâ8Ï‘¤–å1J$3862f39d-a287-4dff-8721-994bc7c84960

@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Date;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RealtimeWeatherControllerTests {
 
     private static final String END_POINT_PATH = "/v1/realtime";
+    public static final String APPLICATION_HAL_JSON = "application/hal+json";
 
     @Autowired
     MockMvc mockMvc;
@@ -58,7 +60,7 @@ class RealtimeWeatherControllerTests {
     }
 
     @Test
-    void testShouldReturnStatus200OK() throws Exception {
+    void testGetByIpShouldReturnStatus200OK() throws Exception {
         Location location = new Location();
         location.setCode("SFCA_USA");
         location.setCityName("San Francisco");
@@ -84,8 +86,50 @@ class RealtimeWeatherControllerTests {
 
         mockMvc.perform(get(END_POINT_PATH))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
                 .andExpect(jsonPath("$.location", is(expectedLocation)))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/realtime")))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly")))
+                .andExpect(jsonPath("$._links.daily_forecast.href",is("http://localhost/v1/daily")))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full")))
+                .andDo(print());
+    }
+
+    @Test
+    void testGetByLocationCodeShouldReturnStatus200OK() throws Exception {
+        Location location = new Location();
+        String locationCode = "SFCA_USA";
+        location.setCode(locationCode);
+        location.setCityName("San Francisco");
+        location.setRegionName("California");
+        location.setCountryName("United States of America");
+        location.setCountryCode("US");
+
+        RealtimeWeather realtimeWeather = new RealtimeWeather();
+        realtimeWeather.setTemperature(12);
+        realtimeWeather.setHumidity(32);
+        realtimeWeather.setLastUpdated(new Date());
+        realtimeWeather.setPrecipitation(88);
+        realtimeWeather.setStatus("Cloudy");
+        realtimeWeather.setWindSpeed(5);
+
+        realtimeWeather.setLocation(location);
+        location.setRealtimeWeather(realtimeWeather);
+
+        Mockito.when(realtimeWeatherService.getByLocationCode(locationCode)).thenReturn(realtimeWeather);
+
+        String expectedLocation = location.getCityName() + ", " + location.getRegionName() + ", " + location.getCountryName();
+
+        String requestURI = END_POINT_PATH + "/" + locationCode;
+
+        mockMvc.perform(get(requestURI))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
+                .andExpect(jsonPath("$.location", is(expectedLocation)))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/realtime/"+locationCode)))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly/"+locationCode)))
+                .andExpect(jsonPath("$._links.daily_forecast.href",is("http://localhost/v1/daily/"+locationCode)))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full/"+locationCode)))
                 .andDo(print());
     }
 
@@ -108,7 +152,7 @@ class RealtimeWeatherControllerTests {
 
         String bodyContent = mapper.writeValueAsString(realtimeWeatherDto);
 
-        mockMvc.perform(put(url).contentType("application/json").content(bodyContent))
+        mockMvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(bodyContent))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
@@ -172,9 +216,14 @@ class RealtimeWeatherControllerTests {
 
         String expectedLocation = location.getCityName() + ", " + location.getRegionName() + ", " + location.getCountryName();
 
-        mockMvc.perform(put(url).contentType("application/json").content(bodyContent))
+        mockMvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(bodyContent))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.location", is(expectedLocation)))
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/realtime/"+locationCode)))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly/"+locationCode)))
+                .andExpect(jsonPath("$._links.daily_forecast.href",is("http://localhost/v1/daily/"+locationCode)))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full/"+locationCode)))
                 .andDo(print());
     }
 }

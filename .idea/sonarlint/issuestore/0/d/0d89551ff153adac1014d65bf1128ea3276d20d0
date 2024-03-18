@@ -1,9 +1,11 @@
 
+
+java:S1128"JRemove this unused import 'com.fasterxml.jackson.annotation.JsonProperty'.(ËÃ§Ï8áÈ¸–å1J$99f5c3c5-1872-4c44-be5f-6c25dab74227
 š
-java:S1128"RRemove this unused import 'com.pblgllgs.weatherapiservice.common.RealtimeWeather'.(×Ëÿûüÿÿÿÿ8Ø’Ôüã1J$cfdd7c35-772a-423c-ae98-a5f2de349b69
+java:S1128"RRemove this unused import 'com.pblgllgs.weatherapiservice.common.RealtimeWeather'.(×Ëÿûüÿÿÿÿ8¥’¸å1J$1cfa4cc1-200d-4ed9-9eec-3dc72b4ce216
 Œ
-java:S1128"DRemove this unused import 'jakarta.validation.constraints.NotBlank'.(ÕØ¡Õøÿÿÿÿ8ª§¨şã1J$9fec70a6-5efa-45a3-9967-fdf2794c43d1
+java:S1128"DRemove this unused import 'jakarta.validation.constraints.NotBlank'.(ÕØ¡Õøÿÿÿÿ8¥’¸å1J$06e84050-d8c3-47dd-b7eb-60e43766fcaa
 |
-java:S1128"4Remove this unused import 'org.modelmapper.TypeMap'.(½ÈËùÿÿÿÿ8Ù’Ôüã1J$0328ac3a-199d-480b-929e-9b55ce29e4ca
+java:S1128"4Remove this unused import 'org.modelmapper.TypeMap'.(½ÈËùÿÿÿÿ8¥’¸å1J$7464f3b3-c171-4b0b-b341-98bc1b98a45f
 Š
-java:S1128"BRemove this unused import 'org.modelmapper.spi.DestinationSetter'.(¦»ıßüÿÿÿÿ8Ù’Ôüã1J$41b8b1c3-e48c-4551-b051-1dd0454e8894
+java:S1128"BRemove this unused import 'org.modelmapper.spi.DestinationSetter'.(¦»ıßüÿÿÿÿ8¥’¸å1J$fdb5580b-9ae7-4695-ab4d-aac660542186

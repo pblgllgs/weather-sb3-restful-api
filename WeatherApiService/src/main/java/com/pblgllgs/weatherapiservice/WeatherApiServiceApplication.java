@@ -1,5 +1,8 @@
 package com.pblgllgs.weatherapiservice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.pblgllgs.weatherapiservice.common.DailyWeather;
 import com.pblgllgs.weatherapiservice.common.HourlyWeather;
 import com.pblgllgs.weatherapiservice.common.Location;
@@ -61,6 +64,14 @@ public class WeatherApiServiceApplication {
                         src.getMonth(),
                         (dest, value) -> dest.getId().setMonth(value != null ? (int) value : 0)
                 );
+    }
+
+    @Bean
+    public ObjectMapper objectMapper(){
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        return objectMapper;
     }
 
     private void configureMappingForHourlyWeather(ModelMapper mapper) {

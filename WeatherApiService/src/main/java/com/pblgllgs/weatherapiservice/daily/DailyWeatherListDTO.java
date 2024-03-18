@@ -8,19 +8,18 @@ package com.pblgllgs.weatherapiservice.daily;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pblgllgs.weatherapiservice.common.DailyWeather;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DailyWeatherListDTO {
+public class DailyWeatherListDTO extends RepresentationModel<DailyWeatherListDTO> {
 
     private String location;
     @JsonProperty("daily_forecast")
