@@ -2,11 +2,14 @@ package com.pblgllgs.weatherapiservice.location;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pblgllgs.weatherapiservice.common.Location;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -81,6 +84,7 @@ class LocationApiControllerTests {
     }
 
     @Test
+    @Disabled
     void testListShouldReturn204NoContent() throws Exception {
         Mockito.when(locationService.list()).thenReturn(Collections.emptyList());
         mockMvc
@@ -91,6 +95,7 @@ class LocationApiControllerTests {
     }
 
     @Test
+    @Disabled
     void testListShouldReturn200OK() throws Exception {
         Location location1 = new Location();
         location1.setCode("NYC_USA");
@@ -118,6 +123,64 @@ class LocationApiControllerTests {
 
 
         Mockito.when(locationService.list()).thenReturn(Arrays.asList(location1, location2, location3));
+        mockMvc
+                .perform(
+                        get(END_POINT_PATH))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].code", is("NYC_USA")))
+                .andExpect(jsonPath("$[1].code", is("CH_CL")))
+                .andExpect(jsonPath("$[2].code", is("AL_AL")))
+                .andExpect(jsonPath("$[2].city_name", is("CITY")))
+                .andDo(print());
+    }
+
+    @Test
+    void testListPageShouldReturn204NoContent() throws Exception {
+        Mockito.when(
+                locationService.listByPage(
+                        Mockito.anyInt(),
+                        Mockito.anyInt(),
+                        Mockito.anyString()
+                ))
+                .thenReturn(Page.empty());
+        mockMvc
+                .perform(
+                        get(END_POINT_PATH)).
+                andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+    @Test
+    void testListPageShouldReturn200OK() throws Exception {
+        Location location1 = new Location();
+        location1.setCode("NYC_USA");
+        location1.setCityName("New York City");
+        location1.setRegionName("New York");
+        location1.setCountryCode("US");
+        location1.setCountryName("United States of America");
+        location1.setEnabled(true);
+
+        Location location2 = new Location();
+        location2.setCode("CH_CL");
+        location2.setCityName("CHILLAN");
+        location2.setRegionName("ÑUBLE");
+        location2.setCountryCode("CL");
+        location2.setCountryName("CHILE");
+        location2.setEnabled(true);
+
+        Location location3 = new Location();
+        location3.setCode("AL_AL");
+        location3.setCityName("CITY");
+        location3.setRegionName("CITY");
+        location3.setCountryCode("AL");
+        location3.setCountryName("ALBANIA");
+        location3.setEnabled(true);
+
+        Page<Location> page = new PageImpl<>(Arrays.asList(location1, location2, location3));
+
+        Mockito.when(locationService.listByPage(Mockito.anyInt(),
+                Mockito.anyInt(),
+                Mockito.anyString())).thenReturn(page);
         mockMvc
                 .perform(
                         get(END_POINT_PATH))

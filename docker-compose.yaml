@@ -22,18 +22,18 @@ services:
     networks:
       - spring-network
 
-  weather-service:
-    container_name: weather-service
-    image: pblgllgs/weather-service:1.0.0
-    environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql_db_weather:3306/db_weather"
-    ports:
-      - "8080:8080"
-    depends_on:
-      mysql_db_weather:
-        condition: service_healthy
-    networks:
-      - spring-network
+#  weather-service:
+#    container_name: weather-service
+#    image: pblgllgs/weather-service:1.0.0
+#    environment:
+#      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql_db_weather:3306/db_weather"
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      mysql_db_weather:
+#        condition: service_healthy
+#    networks:
+#      - spring-network
 
 volumes:
   volume_mysql_db_weather:

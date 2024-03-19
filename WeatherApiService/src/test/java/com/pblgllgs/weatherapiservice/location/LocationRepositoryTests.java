@@ -4,10 +4,15 @@ import com.pblgllgs.weatherapiservice.common.DailyWeather;
 import com.pblgllgs.weatherapiservice.common.HourlyWeather;
 import com.pblgllgs.weatherapiservice.common.Location;
 import com.pblgllgs.weatherapiservice.common.RealtimeWeather;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.Date;
@@ -54,10 +59,42 @@ class LocationRepositoryTests {
     }
 
     @Test
+    @Disabled
     void testListSuccess() {
         List<Location> locations = locationRepository.findUntrashed();
         assertThat(locations).isNotEmpty();
         locations.forEach(System.out::println);
+    }
+
+    @Test
+    void testListFirstPageSuccess() {
+        int pageSize = 3;
+        int pageNum = 0;
+        Pageable pageable = PageRequest.of(pageNum,pageSize);
+        Page<Location> page = locationRepository.findUntrashed(pageable);
+        assertThat(page).size().isEqualTo(pageSize);
+        page.forEach(System.out::println);
+    }
+
+    @Test
+    void testListLocations204NoContent() {
+        int pageSize = 3;
+        int pageNum = 1;
+        Pageable pageable = PageRequest.of(pageNum,pageSize);
+        Page<Location> page = locationRepository.findUntrashed(pageable);
+        assertThat(page).isEmpty();
+        page.forEach(System.out::println);
+    }
+
+    @Test
+    void testListLocationsWithSort() {
+        int pageSize = 2;
+        int pageNum = 0;
+        Sort sort = Sort.by("code").ascending();
+        Pageable pageable = PageRequest.of(pageNum,pageSize,sort);
+        Page<Location> page = locationRepository.findUntrashed(pageable);
+        assertThat(page).size().isEqualTo(pageSize);
+        page.forEach(System.out::println);
     }
 
     @Test
@@ -157,7 +194,7 @@ class LocationRepositoryTests {
     void testFindLocationByCountryCodeAndCityNameFound() {
         String countryCode = "US";
         String cityName = "New York City";
-        Location lo = locationRepository.findByCountryCodeAndCityName(countryCode,cityName);
+        Location lo = locationRepository.findByCountryCodeAndCityName(countryCode, cityName);
         assertThat(lo).isNotNull();
         assertThat(lo.getCountryCode()).isEqualTo(countryCode);
         assertThat(lo.getCityName()).isEqualTo(cityName);
@@ -167,12 +204,12 @@ class LocationRepositoryTests {
     void testFindLocationByCountryCodeAndCityNameNotFound() {
         String countryCode = "ASD";
         String cityName = "TEST";
-        Location lo = locationRepository.findByCountryCodeAndCityName(countryCode,cityName);
+        Location lo = locationRepository.findByCountryCodeAndCityName(countryCode, cityName);
         assertThat(lo).isNull();
     }
 
     @Test
-    void testAddDailyWeatherData(){
+    void testAddDailyWeatherData() {
         Location location = locationRepository.findById("SCL").get();
         List<DailyWeather> dailyWeatherList = location.getListDailyWeather();
         DailyWeather forecast1 = new DailyWeather()
@@ -193,7 +230,7 @@ class LocationRepositoryTests {
                 .precipitation(10)
                 .status("Clear");
 
-        dailyWeatherList.addAll(List.of(forecast1,forecast2));
+        dailyWeatherList.addAll(List.of(forecast1, forecast2));
         Location updatedLocation = locationRepository.save(location);
 
         assertThat(updatedLocation.getListDailyWeather()).isNotEmpty();

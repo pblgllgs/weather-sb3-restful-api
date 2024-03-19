@@ -173,6 +173,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return this.cityName + ", " + (regionName != null ? regionName : "") + ", " + countryName;
+        return code + " => " + this.cityName + ", " + (regionName != null ? regionName : "") + ", " + countryName;
     }
 }

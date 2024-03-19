@@ -3,6 +3,7 @@ package com.pblgllgs.weatherapiservice.location;
 import com.pblgllgs.weatherapiservice.common.Location;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +29,27 @@ public class LocationApiController {
         return ResponseEntity.created(uri).body(entity2DTO(addedLocation));
     }
 
-    @GetMapping
+    @Deprecated
     public ResponseEntity<List<LocationDTO>> listLocation() {
         List<Location> list = locationService.list();
         if (list.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(listEntity2ListDTO(list));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LocationDTO>> listLocation(
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "size", required = false, defaultValue = "3") Integer pageSize,
+            @RequestParam(value = "sort", required = false, defaultValue = "code") String sort
+    ) {
+        Page<Location> page = locationService.listByPage(pageNum - 1, pageSize, sort);
+        List<Location> locations = page.getContent();
+        if (locations.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(listEntity2ListDTO(locations));
     }
 
     @GetMapping("/{code}")
