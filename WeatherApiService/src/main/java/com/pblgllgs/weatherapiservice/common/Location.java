@@ -3,6 +3,9 @@ package com.pblgllgs.weatherapiservice.common;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "locations")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Location {
 
     @Id
@@ -49,9 +55,6 @@ public class Location {
     @OneToMany(mappedBy = "id.location", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyWeather> listDailyWeather = new ArrayList<>();
 
-    public Location() {
-    }
-
     public Location(String cityName, String regionName, String countryName, String countryCode) {
         this.cityName = cityName;
         this.regionName = regionName;
@@ -59,85 +62,6 @@ public class Location {
         this.countryCode = countryCode;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public String getRegionName() {
-        return regionName;
-    }
-
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
-
-    public String getCountryCode() {
-        return countryCode;
-    }
-
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isTrashed() {
-        return trashed;
-    }
-
-    public void setTrashed(boolean trashed) {
-        this.trashed = trashed;
-    }
-
-    public RealtimeWeather getRealtimeWeather() {
-        return realtimeWeather;
-    }
-
-    public void setRealtimeWeather(RealtimeWeather realtimeWeather) {
-        this.realtimeWeather = realtimeWeather;
-    }
-
-    public List<HourlyWeather> getListHourlyWeather() {
-        return listHourlyWeather;
-    }
-
-    public List<DailyWeather> getListDailyWeather() {
-        return listDailyWeather;
-    }
-
-    public void setListDailyWeather(List<DailyWeather> listDailyWeather) {
-        this.listDailyWeather = listDailyWeather;
-    }
-
-    public void setListHourlyWeather(List<HourlyWeather> listHourlyWeather) {
-        this.listHourlyWeather = listHourlyWeather;
-    }
 
     public void copyFieldsFrom(Location another) {
         setCityName(another.getCityName());

@@ -8,13 +8,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class LocationApiControllerTests {
 
     private static final String END_POINT_PATH = "/v1/locations";
+    private static final String APPLICATION_HAL_JSON= "application/hal+json";
 
     @Autowired
     MockMvc mockMvc;
@@ -137,16 +139,76 @@ class LocationApiControllerTests {
     @Test
     void testListPageShouldReturn204NoContent() throws Exception {
         Mockito.when(
-                locationService.listByPage(
-                        Mockito.anyInt(),
-                        Mockito.anyInt(),
-                        Mockito.anyString()
-                ))
+                        locationService.listByPage(
+                                Mockito.anyInt(),
+                                Mockito.anyInt(),
+                                Mockito.anyString()
+                        ))
                 .thenReturn(Page.empty());
         mockMvc
                 .perform(
                         get(END_POINT_PATH)).
                 andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+    @Test
+    void testListLocationPageShouldReturn400BadRequestInvalidPageNum() throws Exception {
+        int pageNum = -1;
+        int pageSize = 5;
+        String sortField = "code";
+        Mockito.when(
+                        locationService.listByPage(
+                                pageNum,
+                                pageSize,
+                                sortField
+                        ))
+                .thenReturn(Page.empty());
+        String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
+        mockMvc
+                .perform(get(requestURI))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors",is(Map.of("Error","listLocation.pageNum: must be greater than or equal to 1"))))
+                .andDo(print());
+    }
+
+    @Test
+    void testListLocationPageShouldReturn400BadRequestInvalidPageSize() throws Exception {
+        int pageNum = 1;
+        int pageSize = 1;
+        String sortField = "code";
+        Mockito.when(
+                        locationService.listByPage(
+                                pageNum,
+                                pageSize,
+                                sortField
+                        ))
+                .thenReturn(Page.empty());
+        String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
+        mockMvc
+                .perform(get(requestURI))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors",is(Map.of("Error","listLocation.pageSize: must be greater than or equal to 3"))))
+                .andDo(print());
+    }
+
+    @Test
+    void testListLocationPageShouldReturn400BadRequestInvalidSortField() throws Exception {
+        int pageNum = 1;
+        int pageSize = 3;
+        String sortField = "code_fail";
+        Mockito.when(
+                        locationService.listByPage(
+                                pageNum,
+                                pageSize,
+                                sortField
+                        ))
+                .thenReturn(Page.empty());
+        String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
+        mockMvc
+                .perform(get(requestURI))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors",is(Map.of("Error","Invalid Sort Field: "+sortField))))
                 .andDo(print());
     }
 
@@ -176,19 +238,38 @@ class LocationApiControllerTests {
         location3.setCountryName("ALBANIA");
         location3.setEnabled(true);
 
-        Page<Location> page = new PageImpl<>(Arrays.asList(location1, location2, location3));
+        List<Location> locations = List.of(location1, location2, location3);
 
-        Mockito.when(locationService.listByPage(Mockito.anyInt(),
-                Mockito.anyInt(),
-                Mockito.anyString())).thenReturn(page);
+        int pageNum = 1;
+        int pageSize = 3;
+        String sortField = "code";
+        int totalElements = locations.size();
+
+        Sort sort = Sort.by(sortField);
+        Pageable pageable = PageRequest.of(pageNum -1 ,pageSize,sort);
+
+        Page<Location> page = new PageImpl<>(locations,pageable,totalElements);
+
+        String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
+
+        Mockito.when(locationService.listByPage(
+                pageNum - 1,
+                pageSize,
+                sortField
+        )).thenReturn(page);
         mockMvc
                 .perform(
-                        get(END_POINT_PATH))
+                        get(requestURI))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].code", is("NYC_USA")))
-                .andExpect(jsonPath("$[1].code", is("CH_CL")))
-                .andExpect(jsonPath("$[2].code", is("AL_AL")))
-                .andExpect(jsonPath("$[2].city_name", is("CITY")))
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
+                .andExpect(jsonPath("$._embedded.locations[0].code", is("NYC_USA")))
+                .andExpect(jsonPath("$._embedded.locations[1].city_name", is("CHILLAN")))
+                .andExpect(jsonPath("$._embedded.locations[2].code", is("AL_AL")))
+                .andExpect(jsonPath("$._embedded.locations[2].city_name", is("CITY")))
+                .andExpect(jsonPath("$.page.size",is(pageSize)))
+                .andExpect(jsonPath("$.page.number",is(pageNum)))
+                .andExpect(jsonPath("$.page.total_elements",is(totalElements)))
+                .andExpect(jsonPath("$.page.total_pages",is(1)))
                 .andDo(print());
     }
 
@@ -196,14 +277,14 @@ class LocationApiControllerTests {
     void testGetShouldReturn405NotAllowed() throws Exception {
         mockMvc
                 .perform(
-                        post(END_POINT_PATH+ "/ASD"))
+                        post(END_POINT_PATH + "/ASD"))
                 .andExpect(status().isMethodNotAllowed())
                 .andDo(print());
     }
 
     @Test
     void testGetLocation404NotFound() throws Exception {
-        String requestUri= END_POINT_PATH+"/ASD";
+        String requestUri = END_POINT_PATH + "/ASD";
         Mockito.when(locationService.getLocation("ASD")).thenThrow(LocationNotFoundException.class);
         mockMvc.perform(get(requestUri))
                 .andExpect(status().isNotFound())

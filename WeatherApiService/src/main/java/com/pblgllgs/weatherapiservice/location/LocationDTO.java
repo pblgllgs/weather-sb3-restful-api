@@ -1,15 +1,18 @@
 package com.pblgllgs.weatherapiservice.location;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.core.Relation;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LocationDTO {
+@Relation(collectionRelation = "locations")
+public class LocationDTO extends CollectionModel<LocationDTO> {
     @NotNull(message = "Location code cannot be null")
     @Length(min = 3, max = 12, message = "Location code must ve 3-12 characters")
     private String code;
