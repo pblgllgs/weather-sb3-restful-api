@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class LocationApiControllerTests {
 
     private static final String END_POINT_PATH = "/v1/locations";
-    private static final String APPLICATION_HAL_JSON= "application/hal+json";
+    private static final String APPLICATION_HAL_JSON = "application/hal+json";
 
     @Autowired
     MockMvc mockMvc;
@@ -168,7 +168,7 @@ class LocationApiControllerTests {
         mockMvc
                 .perform(get(requestURI))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors",is(Map.of("Error","listLocation.pageNum: must be greater than or equal to 1"))))
+                .andExpect(jsonPath("$.errors", is(Map.of("Error", "listLocation.pageNum: must be greater than or equal to 1"))))
                 .andDo(print());
     }
 
@@ -188,7 +188,7 @@ class LocationApiControllerTests {
         mockMvc
                 .perform(get(requestURI))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors",is(Map.of("Error","listLocation.pageSize: must be greater than or equal to 3"))))
+                .andExpect(jsonPath("$.errors", is(Map.of("Error", "listLocation.pageSize: must be greater than or equal to 3"))))
                 .andDo(print());
     }
 
@@ -208,7 +208,7 @@ class LocationApiControllerTests {
         mockMvc
                 .perform(get(requestURI))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors",is(Map.of("Error","Invalid Sort Field: "+sortField))))
+                .andExpect(jsonPath("$.errors", is(Map.of("Error", "Invalid Sort Field: " + sortField))))
                 .andDo(print());
     }
 
@@ -246,9 +246,9 @@ class LocationApiControllerTests {
         int totalElements = locations.size();
 
         Sort sort = Sort.by(sortField);
-        Pageable pageable = PageRequest.of(pageNum -1 ,pageSize,sort);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
 
-        Page<Location> page = new PageImpl<>(locations,pageable,totalElements);
+        Page<Location> page = new PageImpl<>(locations, pageable, totalElements);
 
         String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
 
@@ -266,10 +266,239 @@ class LocationApiControllerTests {
                 .andExpect(jsonPath("$._embedded.locations[1].city_name", is("CHILLAN")))
                 .andExpect(jsonPath("$._embedded.locations[2].code", is("AL_AL")))
                 .andExpect(jsonPath("$._embedded.locations[2].city_name", is("CITY")))
-                .andExpect(jsonPath("$.page.size",is(pageSize)))
-                .andExpect(jsonPath("$.page.number",is(pageNum)))
-                .andExpect(jsonPath("$.page.total_elements",is(totalElements)))
-                .andExpect(jsonPath("$.page.total_pages",is(1)))
+                .andExpect(jsonPath("$.page.size", is(pageSize)))
+                .andExpect(jsonPath("$.page.number", is(pageNum)))
+                .andExpect(jsonPath("$.page.total_elements", is(totalElements)))
+                .andExpect(jsonPath("$.page.total_pages", is(1)))
+                .andDo(print());
+    }
+
+    @Test
+    void testListPageginationLinkOnlyOnePage() throws Exception {
+        Location location1 = new Location();
+        location1.setCode("NYC_USA");
+        location1.setCityName("New York City");
+        location1.setRegionName("New York");
+        location1.setCountryCode("US");
+        location1.setCountryName("United States of America");
+        location1.setEnabled(true);
+
+        Location location2 = new Location();
+        location2.setCode("CH_CL");
+        location2.setCityName("CHILLAN");
+        location2.setRegionName("ÑUBLE");
+        location2.setCountryCode("CL");
+        location2.setCountryName("CHILE");
+        location2.setEnabled(true);
+
+
+        List<Location> locations = List.of(location1, location2);
+
+        int pageNum = 1;
+        int pageSize = 3;
+        String sortField = "code";
+        int totalElements = locations.size();
+
+        Sort sort = Sort.by(sortField);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+
+        Page<Location> page = new PageImpl<>(locations, pageable, totalElements);
+
+        String hostName = "http://localhost";
+        String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
+
+        Mockito.when(locationService.listByPage(
+                pageNum - 1,
+                pageSize,
+                sortField
+        )).thenReturn(page);
+        mockMvc
+                .perform(
+                        get(requestURI))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
+                .andExpect(jsonPath("$._links.self.href", is(hostName + requestURI)))
+                .andExpect(jsonPath("$._links.first").doesNotExist())
+                .andExpect(jsonPath("$._links.next").doesNotExist())
+                .andExpect(jsonPath("$._links.prev").doesNotExist())
+                .andExpect(jsonPath("$._links.last").doesNotExist())
+                .andDo(print());
+    }
+
+    @Test
+    void testListPaginationLinkFirstPage() throws Exception {
+        Location location1 = new Location();
+        location1.setCode("NYC_USA");
+        location1.setCityName("New York City");
+        location1.setRegionName("New York");
+        location1.setCountryCode("US");
+        location1.setCountryName("United States of America");
+        location1.setEnabled(true);
+
+        Location location2 = new Location();
+        location2.setCode("CH_CL");
+        location2.setCityName("CHILLAN");
+        location2.setRegionName("ÑUBLE");
+        location2.setCountryCode("CL");
+        location2.setCountryName("CHILE");
+        location2.setEnabled(true);
+
+        Location location3 = new Location();
+        location1.setCode("LACA_US");
+        location1.setCityName("New York City");
+        location1.setRegionName("New York");
+        location1.setCountryCode("US");
+        location1.setCountryName("United States of America");
+        location1.setEnabled(true);
+
+        Location location4 = new Location();
+        location2.setCode("MADRID_ES");
+        location2.setCityName("CHILLAN");
+        location2.setRegionName("ÑUBLE");
+        location2.setCountryCode("CL");
+        location2.setCountryName("CHILE");
+        location2.setEnabled(true);
+
+
+        List<Location> locations = List.of(location1, location2, location3, location4);
+
+        int pageNum = 1;
+        int pageSize = 3;
+        String sortField = "code";
+        int totalElements = locations.size();
+        int totalPages = totalElements / pageSize + 1;
+
+        Sort sort = Sort.by(sortField);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+
+        Page<Location> page = new PageImpl<>(locations, pageable, totalElements);
+
+        String hostName = "http://localhost";
+        String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
+
+        String nextPageURI = END_POINT_PATH + "?page=" + (pageNum + 1) + "&size=" + pageSize + "&sort=" + sortField;
+        String lastPageURI = END_POINT_PATH + "?page=" + totalPages + "&size=" + pageSize + "&sort=" + sortField;
+
+        Mockito.when(locationService.listByPage(
+                pageNum - 1,
+                pageSize,
+                sortField
+        )).thenReturn(page);
+        mockMvc
+                .perform(
+                        get(requestURI))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
+                .andExpect(jsonPath("$._links.self.href", is(hostName + requestURI)))
+                .andExpect(jsonPath("$._links.next.href", is(hostName + nextPageURI)))
+                .andExpect(jsonPath("$._links.last.href", is(hostName + lastPageURI)))
+                .andExpect(jsonPath("$._links.first").doesNotExist())
+                .andExpect(jsonPath("$._links.prev").doesNotExist())
+                .andDo(print());
+    }
+
+    @Test
+    void testListPaginationLinkMiddlePage() throws Exception {
+        Location location1 = new Location();
+        location1.setCode("NYC_USA");
+        location1.setCityName("New York City");
+        location1.setRegionName("New York");
+        location1.setCountryCode("US");
+        location1.setCountryName("United States of America");
+        location1.setEnabled(true);
+
+        Location location2 = new Location();
+        location2.setCode("CH_CL");
+        location2.setCityName("CHILLAN");
+        location2.setRegionName("ÑUBLE");
+        location2.setCountryCode("CL");
+        location2.setCountryName("CHILE");
+        location2.setEnabled(true);
+
+        Location location3 = new Location();
+        location1.setCode("LACA_US");
+        location1.setCityName("New York City");
+        location1.setRegionName("New York");
+        location1.setCountryCode("US");
+        location1.setCountryName("United States of America");
+        location1.setEnabled(true);
+
+        Location location4 = new Location();
+        location2.setCode("MADRID_ES");
+        location2.setCityName("CHILLAN");
+        location2.setRegionName("ÑUBLE");
+        location2.setCountryCode("CL");
+        location2.setCountryName("CHILE");
+        location2.setEnabled(true);
+
+        Location location5 = new Location();
+        location1.setCode("PARIS_FR");
+        location1.setCityName("New York City");
+        location1.setRegionName("New York");
+        location1.setCountryCode("US");
+        location1.setCountryName("United States of America");
+        location1.setEnabled(true);
+
+        Location location6 = new Location();
+        location2.setCode("LON_UK");
+        location2.setCityName("CHILLAN");
+        location2.setRegionName("ÑUBLE");
+        location2.setCountryCode("CL");
+        location2.setCountryName("CHILE");
+        location2.setEnabled(true);
+
+        Location location7 = new Location();
+        location1.setCode("DELHI_IN");
+        location1.setCityName("New York City");
+        location1.setRegionName("New York");
+        location1.setCountryCode("US");
+        location1.setCountryName("United States of America");
+        location1.setEnabled(true);
+
+        Location location8 = new Location();
+        location2.setCode("MOMBAI_IN");
+        location2.setCityName("CHILLAN");
+        location2.setRegionName("ÑUBLE");
+        location2.setCountryCode("CL");
+        location2.setCountryName("CHILE");
+        location2.setEnabled(true);
+
+        List<Location> locations = List.of(location1, location2, location3, location4, location5,location6, location7, location8);
+
+        int pageNum = 2;
+        int pageSize = 3;
+        String sortField = "code";
+        int totalElements = locations.size();
+        int totalPages = totalElements / pageSize + 1;
+
+        Sort sort = Sort.by(sortField);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+
+        Page<Location> page = new PageImpl<>(locations, pageable, totalElements);
+
+        String hostName = "http://localhost";
+        String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
+
+        String firstPageURI = END_POINT_PATH + "?page=" + 1 + "&size=" + pageSize + "&sort=" + sortField;
+        String prevPageURI = END_POINT_PATH + "?page=" + (pageNum - 1) + "&size=" + pageSize + "&sort=" + sortField;
+        String nextPageURI = END_POINT_PATH + "?page=" + (pageNum + 1) + "&size=" + pageSize + "&sort=" + sortField;
+        String lastPageURI = END_POINT_PATH + "?page=" + totalPages + "&size=" + pageSize + "&sort=" + sortField;
+
+        Mockito.when(locationService.listByPage(
+                pageNum - 1,
+                pageSize,
+                sortField
+        )).thenReturn(page);
+        mockMvc
+                .perform(
+                        get(requestURI))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
+                .andExpect(jsonPath("$._links.self.href", is(hostName + requestURI)))
+                .andExpect(jsonPath("$._links.next.href", is(hostName + nextPageURI)))
+                .andExpect(jsonPath("$._links.last.href", is(hostName + lastPageURI)))
+                .andExpect(jsonPath("$._links.prev.href", is(hostName + prevPageURI)))
+                .andExpect(jsonPath("$._links.first.href", is(hostName + firstPageURI)))
                 .andDo(print());
     }
 
