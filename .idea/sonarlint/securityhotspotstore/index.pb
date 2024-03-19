@@ -192,3 +192,5 @@ WWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/base/MainControl
 [WeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/base/MainControllerTest.java,7\3\73c36a9bcb95d4c0767059d4a8d35004e75cd03b
 ’
 bWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/FullWeatherModelAssembler.java,2\f\2f799fb0c014ed7178d874fdde86fe24ac8f5124
+—
+gWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/location/LocationCriteriaQueryTests.java,e\8\e82870a0749db79f1eb1260fe5ffc9ac5bc2bd3c
