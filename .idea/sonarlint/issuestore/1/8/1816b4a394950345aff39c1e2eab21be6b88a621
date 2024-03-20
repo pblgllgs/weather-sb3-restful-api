@@ -1,7 +1,9 @@
 
 ‹
-java:S63552"HAdd 'since' and/or 'forRemoval' arguments to the @Deprecated annotation.(υϊ8ƒζά»ε1J$9a62d778-db5f-4634-950d-47f21001b423
+java:S1192)"HDefine a constant instead of duplicating this literal "enabled" 3 times.(„Σ†­8Γ½–κε1J$70c8fc61-8dcd-4758-b57b-3ede0da0b55d
+‹
+java:S63553"HAdd 'since' and/or 'forRemoval' arguments to the @Deprecated annotation.(υϊ8ο½–κε1J$17b11312-79dc-41ef-981d-bafee929c02f
 }
-java:S11333"5Do not forget to remove this deprecated code someday.(Ε¬‹„ωÿÿÿÿ8„ζά»ε1J$38d33545-9683-4c16-b38e-d99d48f8853a
+java:S11334"5Do not forget to remove this deprecated code someday.(Ε¬‹„ωÿÿÿÿ8ο½–κε1J$26ab71a1-848e-4e3e-8e69-a5ced3f3b6fb
 p
-java:S11233"(Add the missing @deprecated Javadoc tag.(Ε¬‹„ωÿÿÿÿ8„ζά»ε1J$02d9742b-2750-4ad6-b72b-79138a93f58a
+java:S11234"(Add the missing @deprecated Javadoc tag.(Ε¬‹„ωÿÿÿÿ8π½–κε1J$08afe808-d053-44b4-ba47-1eddd320a645

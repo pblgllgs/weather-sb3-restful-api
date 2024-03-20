@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,17 +63,35 @@ public class LocationApiController {
             @Min(value = 1) Integer pageNum,
             @RequestParam(value = "size", required = false, defaultValue = "3")
             @Min(value = 3) @Max(value = 20) Integer pageSize,
-            @RequestParam(value = "sort", required = false, defaultValue = "code") String sortField
+            @RequestParam(value = "sort", required = false, defaultValue = "code") String sortField,
+            @RequestParam(value = "enabled", required = false, defaultValue = "") String enabled,
+            @RequestParam(value = "region_name", required = false, defaultValue = "") String regionName,
+            @RequestParam(value = "country_code", required = false, defaultValue = "") String countryCode
     ) throws BadRequestException {
         if (!propertyMap.containsKey(sortField)) {
             throw new BadRequestException("Invalid Sort Field: " + sortField);
         }
-        Page<Location> page = locationService.listByPage(pageNum - 1, pageSize, propertyMap.get(sortField));
+        Map<String, Object> filterFields = new HashMap<>();
+        if (!"".equals(enabled)) {
+            filterFields.put("enabled", Boolean.parseBoolean(enabled));
+        }
+        if (!"".equals(regionName)) {
+            filterFields.put("regionName", regionName);
+        }
+        if (!"".equals(countryCode)) {
+            filterFields.put("countryCode", countryCode);
+        }
+        Page<Location> page = locationService.listByPage(
+                pageNum - 1,
+                pageSize,
+                propertyMap.get(sortField),
+                filterFields
+        );
         List<Location> locations = page.getContent();
         if (locations.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(addPageMetaDataAndLinks(listEntity2ListDTO(locations), page, sortField));
+        return ResponseEntity.ok(addPageMetaDataAndLinks(listEntity2ListDTO(locations), page, sortField, enabled, regionName, countryCode));
     }
 
     @GetMapping("/{code}")
@@ -108,8 +127,14 @@ public class LocationApiController {
     private CollectionModel<LocationDTO> addPageMetaDataAndLinks(
             List<LocationDTO> listDto,
             Page<Location> pageInfo,
-            String sortField
+            String sortField,
+            String enabled,
+            String regionName,
+            String countryCode
     ) throws BadRequestException {
+        String actualEnabled = "".equals(enabled) ? null : enabled;
+        String actualRegionName = "".equals(regionName) ? null : regionName;
+        String actualCountryCode = "".equals(countryCode) ? null : countryCode;
         listDto.forEach(dto ->
                 dto.add(
                         linkTo(
@@ -127,40 +152,37 @@ public class LocationApiController {
         collectionModels.add(
                 linkTo(
                         methodOn(LocationApiController.class)
-                                .listLocation(pageNum, pageSize, sortField)
+                                .listLocation(pageNum, pageSize, sortField, actualEnabled, actualRegionName, actualCountryCode)
                 ).withSelfRel()
         );
-
         if (pageNum > 1) {
             collectionModels.add(
                     linkTo(
                             methodOn(LocationApiController.class)
-                                    .listLocation(1, pageSize, sortField)
+                                    .listLocation(1, pageSize, sortField, actualEnabled, actualRegionName, actualCountryCode)
                     ).withRel(IanaLinkRelations.FIRST)
             );
             collectionModels.add(
                     linkTo(
                             methodOn(LocationApiController.class)
-                                    .listLocation(pageNum - 1, pageSize, sortField)
+                                    .listLocation(pageNum - 1, pageSize, sortField, actualEnabled, actualRegionName, actualCountryCode)
                     ).withRel(IanaLinkRelations.PREV)
             );
         }
-
-        if (pageNum < totalPages){
+        if (pageNum < totalPages) {
             collectionModels.add(
                     linkTo(
                             methodOn(LocationApiController.class)
-                                    .listLocation(pageNum + 1, pageSize, sortField)
+                                    .listLocation(pageNum + 1, pageSize, sortField, actualEnabled, actualRegionName, actualCountryCode)
                     ).withRel(IanaLinkRelations.NEXT)
             );
             collectionModels.add(
                     linkTo(
                             methodOn(LocationApiController.class)
-                                    .listLocation(totalPages, pageSize, sortField)
+                                    .listLocation(totalPages, pageSize, sortField, actualEnabled, actualRegionName, actualCountryCode)
                     ).withRel(IanaLinkRelations.LAST)
             );
         }
-
         return collectionModels;
     }
 }

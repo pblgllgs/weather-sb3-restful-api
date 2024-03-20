@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pblgllgs.weatherapiservice.common.Location;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -23,17 +24,30 @@ public class LocationService extends AbstractLocationService {
     public Location add(Location location) {
         return locationRepository.save(location);
     }
-    @Transactional(readOnly = true)
     @Deprecated
+    @Transactional(readOnly = true)
     public List<Location> list() {
         return locationRepository.findUntrashed();
     }
 
+    @Deprecated
     @Transactional(readOnly = true)
     public Page<Location> listByPage(int pageNum, int pageSize, String sortField) {
         Sort sort = Sort.by(sortField).ascending();
         Pageable pageable = PageRequest.of(pageNum, pageSize,sort);
         return locationRepository.findUntrashed(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Location> listByPage(
+            int pageNum,
+            int pageSize,
+            String sortField,
+            Map<String, Object> filterFields
+    ) {
+        Sort sort = Sort.by(sortField).ascending();
+        Pageable pageable = PageRequest.of(pageNum, pageSize,sort);
+        return locationRepository.listWithFilter(pageable,filterFields);
     }
 
 

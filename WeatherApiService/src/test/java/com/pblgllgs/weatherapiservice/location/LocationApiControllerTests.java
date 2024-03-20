@@ -12,12 +12,10 @@ import org.springframework.data.domain.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -53,7 +51,7 @@ class LocationApiControllerTests {
     @Test
     void testAddShouldReturn201Created() throws Exception {
         Location location = new Location();
-        location.setCode("NYC_US");
+        location.setCode("NYCS_US");
         location.setCityName("New York City");
         location.setRegionName("New York");
         location.setCountryCode("US");
@@ -78,10 +76,10 @@ class LocationApiControllerTests {
                                 .content(bodyContent)
                 )
                 .andExpect(status().isCreated())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.code", is("NYC_US")))
+                .andExpect(content().contentType("application/hal+json"))
+                .andExpect(jsonPath("$.code", is("NYCS_US")))
                 .andExpect(jsonPath("$.city_name", is("New York City")))
-                .andExpect(header().string("Location", "/v1/locations/NYC_US"))
+                .andExpect(header().string("Location", "/v1/locations/NYCS_US"))
                 .andDo(print());
     }
 
@@ -142,7 +140,8 @@ class LocationApiControllerTests {
                         locationService.listByPage(
                                 Mockito.anyInt(),
                                 Mockito.anyInt(),
-                                Mockito.anyString()
+                                Mockito.anyString(),
+                                Mockito.anyMap()
                         ))
                 .thenReturn(Page.empty());
         mockMvc
@@ -159,9 +158,10 @@ class LocationApiControllerTests {
         String sortField = "code";
         Mockito.when(
                         locationService.listByPage(
-                                pageNum,
-                                pageSize,
-                                sortField
+                                Mockito.anyInt(),
+                                Mockito.anyInt(),
+                                Mockito.anyString(),
+                                Mockito.anyMap()
                         ))
                 .thenReturn(Page.empty());
         String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
@@ -179,9 +179,10 @@ class LocationApiControllerTests {
         String sortField = "code";
         Mockito.when(
                         locationService.listByPage(
-                                pageNum,
-                                pageSize,
-                                sortField
+                                Mockito.anyInt(),
+                                Mockito.anyInt(),
+                                Mockito.anyString(),
+                                Mockito.anyMap()
                         ))
                 .thenReturn(Page.empty());
         String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
@@ -199,9 +200,10 @@ class LocationApiControllerTests {
         String sortField = "code_fail";
         Mockito.when(
                         locationService.listByPage(
-                                pageNum,
-                                pageSize,
-                                sortField
+                                Mockito.anyInt(),
+                                Mockito.anyInt(),
+                                Mockito.anyString(),
+                                Mockito.anyMap()
                         ))
                 .thenReturn(Page.empty());
         String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
@@ -252,11 +254,13 @@ class LocationApiControllerTests {
 
         String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
 
-        Mockito.when(locationService.listByPage(
-                pageNum - 1,
-                pageSize,
-                sortField
-        )).thenReturn(page);
+        Mockito.when(
+                locationService.listByPage(
+                        Mockito.anyInt(),
+                        Mockito.anyInt(),
+                        Mockito.anyString(),
+                        Mockito.anyMap()
+                )).thenReturn(page);
         mockMvc
                 .perform(
                         get(requestURI))
@@ -274,7 +278,7 @@ class LocationApiControllerTests {
     }
 
     @Test
-    void testListPageginationLinkOnlyOnePage() throws Exception {
+    void testListPaginationLinksOnlyOnePage() throws Exception {
         Location location1 = new Location();
         location1.setCode("NYC_USA");
         location1.setCityName("New York City");
@@ -308,16 +312,17 @@ class LocationApiControllerTests {
         String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
 
         Mockito.when(locationService.listByPage(
-                pageNum - 1,
-                pageSize,
-                sortField
+                Mockito.anyInt(),
+                Mockito.anyInt(),
+                Mockito.anyString(),
+                Mockito.anyMap()
         )).thenReturn(page);
         mockMvc
                 .perform(
                         get(requestURI))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_HAL_JSON))
-                .andExpect(jsonPath("$._links.self.href", is(hostName + requestURI)))
+                .andExpect(jsonPath("$._links.self.href", containsString(hostName + requestURI)))
                 .andExpect(jsonPath("$._links.first").doesNotExist())
                 .andExpect(jsonPath("$._links.next").doesNotExist())
                 .andExpect(jsonPath("$._links.prev").doesNotExist())
@@ -380,101 +385,100 @@ class LocationApiControllerTests {
         String lastPageURI = END_POINT_PATH + "?page=" + totalPages + "&size=" + pageSize + "&sort=" + sortField;
 
         Mockito.when(locationService.listByPage(
-                pageNum - 1,
-                pageSize,
-                sortField
+                Mockito.anyInt(),
+                Mockito.anyInt(),
+                Mockito.anyString(),
+                Mockito.anyMap()
         )).thenReturn(page);
         mockMvc
                 .perform(
                         get(requestURI))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_HAL_JSON))
-                .andExpect(jsonPath("$._links.self.href", is(hostName + requestURI)))
-                .andExpect(jsonPath("$._links.next.href", is(hostName + nextPageURI)))
-                .andExpect(jsonPath("$._links.last.href", is(hostName + lastPageURI)))
+                .andExpect(jsonPath("$._links.self.href", containsString(hostName + requestURI)))
+                .andExpect(jsonPath("$._links.next.href", containsString(hostName + nextPageURI)))
+                .andExpect(jsonPath("$._links.last.href", containsString(hostName + lastPageURI)))
                 .andExpect(jsonPath("$._links.first").doesNotExist())
                 .andExpect(jsonPath("$._links.prev").doesNotExist())
                 .andDo(print());
     }
 
     @Test
-    void testListPaginationLinkMiddlePage() throws Exception {
-        Location location1 = new Location();
-        location1.setCode("NYC_USA");
-        location1.setCityName("New York City");
-        location1.setRegionName("New York");
-        location1.setCountryCode("US");
-        location1.setCountryName("United States of America");
-        location1.setEnabled(true);
+    void testListPaginationLinkLastPage() throws Exception {
+        int totalElements = 18;
+        int pageSize = 5;
+        List<Location> listLocations = new ArrayList<>(pageSize);
 
-        Location location2 = new Location();
-        location2.setCode("CH_CL");
-        location2.setCityName("CHILLAN");
-        location2.setRegionName("ÑUBLE");
-        location2.setCountryCode("CL");
-        location2.setCountryName("CHILE");
-        location2.setEnabled(true);
+        for (int i = 1; i < pageSize;i++){
+            listLocations.add(
+                    new Location(
+                            "CODE_" +i,
+                            "City "+ i,
+                            "Region Name",
+                            "US",
+                            "Country Name")
+            );
+        }
 
-        Location location3 = new Location();
-        location1.setCode("LACA_US");
-        location1.setCityName("New York City");
-        location1.setRegionName("New York");
-        location1.setCountryCode("US");
-        location1.setCountryName("United States of America");
-        location1.setEnabled(true);
-
-        Location location4 = new Location();
-        location2.setCode("MADRID_ES");
-        location2.setCityName("CHILLAN");
-        location2.setRegionName("ÑUBLE");
-        location2.setCountryCode("CL");
-        location2.setCountryName("CHILE");
-        location2.setEnabled(true);
-
-        Location location5 = new Location();
-        location1.setCode("PARIS_FR");
-        location1.setCityName("New York City");
-        location1.setRegionName("New York");
-        location1.setCountryCode("US");
-        location1.setCountryName("United States of America");
-        location1.setEnabled(true);
-
-        Location location6 = new Location();
-        location2.setCode("LON_UK");
-        location2.setCityName("CHILLAN");
-        location2.setRegionName("ÑUBLE");
-        location2.setCountryCode("CL");
-        location2.setCountryName("CHILE");
-        location2.setEnabled(true);
-
-        Location location7 = new Location();
-        location1.setCode("DELHI_IN");
-        location1.setCityName("New York City");
-        location1.setRegionName("New York");
-        location1.setCountryCode("US");
-        location1.setCountryName("United States of America");
-        location1.setEnabled(true);
-
-        Location location8 = new Location();
-        location2.setCode("MOMBAI_IN");
-        location2.setCityName("CHILLAN");
-        location2.setRegionName("ÑUBLE");
-        location2.setCountryCode("CL");
-        location2.setCountryName("CHILE");
-        location2.setEnabled(true);
-
-        List<Location> locations = List.of(location1, location2, location3, location4, location5,location6, location7, location8);
-
-        int pageNum = 2;
-        int pageSize = 3;
+        int totalPages = (totalElements / pageSize + 1);
+        int pageNum = totalPages;
         String sortField = "code";
-        int totalElements = locations.size();
-        int totalPages = totalElements / pageSize + 1;
 
         Sort sort = Sort.by(sortField);
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
 
-        Page<Location> page = new PageImpl<>(locations, pageable, totalElements);
+        Page<Location> page = new PageImpl<>(listLocations, pageable, totalElements);
+
+        String hostName = "http://localhost";
+        String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
+
+        String firstPageURI = END_POINT_PATH + "?page=" + 1 + "&size=" + pageSize + "&sort=" + sortField;
+        String prevPageURI = END_POINT_PATH + "?page=" + (pageNum -1) + "&size=" + pageSize + "&sort=" + sortField;
+
+        Mockito.when(locationService.listByPage(
+                Mockito.anyInt(),
+                Mockito.anyInt(),
+                Mockito.anyString(),
+                Mockito.anyMap()
+        )).thenReturn(page);
+        mockMvc
+                .perform(
+                        get(requestURI))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_HAL_JSON))
+                .andExpect(jsonPath("$._links.self.href", containsString(hostName + requestURI)))
+                .andExpect(jsonPath("$._links.first.href", containsString(hostName + firstPageURI)))
+                .andExpect(jsonPath("$._links.prev.href", containsString(hostName + prevPageURI)))
+                .andExpect(jsonPath("$._links.last").doesNotExist())
+                .andExpect(jsonPath("$._links.next").doesNotExist())
+                .andDo(print());
+    }
+
+    @Test
+    void testListPaginationLinksMiddlePage() throws Exception {
+        int totalElements = 18;
+        int pageSize = 5;
+        List<Location> listLocations = new ArrayList<>(pageSize);
+
+        for (int i = 1; i < pageSize;i++){
+            listLocations.add(
+                    new Location(
+                            "CODE_" +i,
+                            "City "+ i,
+                            "Region Name",
+                            "US",
+                            "Country Name")
+            );
+        }
+
+        int totalPages = (totalElements / pageSize + 1);
+        int pageNum = 3;
+        String sortField = "code";
+
+        Sort sort = Sort.by(sortField);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+
+        Page<Location> page = new PageImpl<>(listLocations, pageable, totalElements);
 
         String hostName = "http://localhost";
         String requestURI = END_POINT_PATH + "?page=" + pageNum + "&size=" + pageSize + "&sort=" + sortField;
@@ -485,20 +489,21 @@ class LocationApiControllerTests {
         String lastPageURI = END_POINT_PATH + "?page=" + totalPages + "&size=" + pageSize + "&sort=" + sortField;
 
         Mockito.when(locationService.listByPage(
-                pageNum - 1,
-                pageSize,
-                sortField
+                Mockito.anyInt(),
+                Mockito.anyInt(),
+                Mockito.anyString(),
+                Mockito.anyMap()
         )).thenReturn(page);
         mockMvc
                 .perform(
                         get(requestURI))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_HAL_JSON))
-                .andExpect(jsonPath("$._links.self.href", is(hostName + requestURI)))
-                .andExpect(jsonPath("$._links.next.href", is(hostName + nextPageURI)))
-                .andExpect(jsonPath("$._links.last.href", is(hostName + lastPageURI)))
-                .andExpect(jsonPath("$._links.prev.href", is(hostName + prevPageURI)))
-                .andExpect(jsonPath("$._links.first.href", is(hostName + firstPageURI)))
+                .andExpect(jsonPath("$._links.self.href", containsString(hostName + requestURI)))
+                .andExpect(jsonPath("$._links.next.href", containsString(hostName + nextPageURI)))
+                .andExpect(jsonPath("$._links.last.href", containsString(hostName + lastPageURI)))
+                .andExpect(jsonPath("$._links.prev.href", containsString(hostName + prevPageURI)))
+                .andExpect(jsonPath("$._links.first.href", containsString(hostName + firstPageURI)))
                 .andDo(print());
     }
 
@@ -513,8 +518,11 @@ class LocationApiControllerTests {
 
     @Test
     void testGetLocation404NotFound() throws Exception {
-        String requestUri = END_POINT_PATH + "/ASD";
-        Mockito.when(locationService.getLocation("ASD")).thenThrow(LocationNotFoundException.class);
+        String locationCode = "ASD";
+        String requestUri = END_POINT_PATH +"/"+ locationCode;
+
+        LocationNotFoundException ex = new LocationNotFoundException(locationCode);
+        Mockito.when(locationService.getLocation(locationCode)).thenThrow(ex);
         mockMvc.perform(get(requestUri))
                 .andExpect(status().isNotFound())
                 .andDo(print());
@@ -536,7 +544,7 @@ class LocationApiControllerTests {
                 .perform(
                         get(requestURI))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType("application/hal+json"))
                 .andExpect(jsonPath("$.code", is("NYC_USA")))
                 .andExpect(jsonPath("$.city_name", is("New York City")))
                 .andDo(print());
@@ -608,7 +616,7 @@ class LocationApiControllerTests {
                 .perform(
                         put(END_POINT_PATH).contentType("application/json").content(bodyContent))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType("application/hal+json"))
                 .andExpect(jsonPath("$.code", is("NYC_USA")))
                 .andExpect(jsonPath("$.city_name", is("New York City")))
                 .andDo(print());
@@ -616,7 +624,7 @@ class LocationApiControllerTests {
 
     @Test
     void testDelete404NotFound() throws Exception {
-        String code = "CH_AR";
+        String code = "NYC_US";
         String requestURI = END_POINT_PATH + "/" + code;
 
         Mockito.doThrow(LocationNotFoundException.class).when(locationService).delete(code);

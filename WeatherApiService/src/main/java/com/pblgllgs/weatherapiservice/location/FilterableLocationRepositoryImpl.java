@@ -34,14 +34,41 @@ public class FilterableLocationRepositoryImpl implements FilterableLocationRepos
     @Override
     public Page<Location> listWithFilter(Pageable pageable, Map<String, Object> filterFields) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Location> query = criteriaBuilder.createQuery(Location.class);
+        CriteriaQuery<Location> entityQuery = criteriaBuilder.createQuery(Location.class);
 
-        Root<Location> root = query.from(Location.class);
+        Root<Location> entityRoot = entityQuery.from(Location.class);
 
+        Predicate[] predicates = createPredicates(filterFields, criteriaBuilder, entityRoot);
+
+        if (predicates.length > 0) entityQuery.where(predicates);
+
+        List<Order> listOrder = new ArrayList<>();
+
+        pageable.getSort().stream().forEach( order -> {
+            log.info("Order field: " +order.getProperty());
+            listOrder.add(criteriaBuilder.asc(entityRoot.get(order.getProperty())));
+        });
+
+        entityQuery.orderBy(listOrder);
+
+        TypedQuery<Location> typedQuery = entityManager.createQuery(entityQuery);
+
+        typedQuery.setFirstResult((int) pageable.getOffset());
+        typedQuery.setMaxResults(pageable.getPageSize());
+        List<Location> resultList = typedQuery.getResultList();
+
+        long totalRows = getTotalRows(filterFields);
+
+        return new PageImpl<>(resultList, pageable, totalRows);
+    }
+
+    private Predicate[] createPredicates(
+            Map<String, Object> filterFields,
+            CriteriaBuilder criteriaBuilder,
+            Root<Location> root) {
+        Predicate[]predicates = new Predicate[filterFields.size() + 1];
         if (!filterFields.isEmpty()){
-            Predicate[]predicates = new Predicate[filterFields.size()];
             Iterator<String> iterator = filterFields.keySet().iterator();
-
             int i = 0;
             while(iterator.hasNext()){
                 String fieldName = iterator.next();
@@ -49,26 +76,23 @@ public class FilterableLocationRepositoryImpl implements FilterableLocationRepos
                 log.info(fieldName + " => " + filterValue);
                 predicates[i++] = criteriaBuilder.equal(root.get(fieldName),filterValue);
             }
-            query.where(predicates);
-
         }
+        predicates[predicates.length -1 ] = criteriaBuilder.equal(root.get("trashed"),false);
+        return predicates;
+    }
 
-        List<Order> listOrder = new ArrayList<>();
+    private long getTotalRows(Map<String, Object> filterFields){
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-        pageable.getSort().stream().forEach( order -> {
-            log.info("Order field: " +order.getProperty());
-            listOrder.add(criteriaBuilder.asc(root.get(order.getProperty())));
-        });
+        Root<Location> countRoot = countQuery.from(Location.class);
 
-        query.orderBy(listOrder);
+        countQuery.select(builder.count(countRoot));
 
-        TypedQuery<Location> typedQuery = entityManager.createQuery(query);
+        Predicate[] predicates = createPredicates(filterFields, builder, countRoot);
+        
+        if (predicates.length > 0) countQuery.where(predicates);
 
-        typedQuery.setFirstResult((int) pageable.getOffset());
-        typedQuery.setMaxResults(pageable.getPageSize());
-        List<Location> resultList = typedQuery.getResultList();
-
-        int totalRows = 0;
-        return new PageImpl<>(resultList, pageable, totalRows);
+        return entityManager.createQuery(countQuery).getSingleResult();
     }
 }

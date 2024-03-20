@@ -14,10 +14,11 @@ import java.util.List;
 @Repository
 public interface LocationRepository extends FilterableLocationRepository, CrudRepository<Location, String>, PagingAndSortingRepository<Location,String> {
 
-    @Query("SELECT l FROM Location l WHERE l.trashed =false")
     @Deprecated
+    @Query("SELECT l FROM Location l WHERE l.trashed =false")
     List<Location> findUntrashed();
 
+    @Deprecated
     @Query("SELECT l FROM Location l WHERE l.trashed =false")
     Page<Location> findUntrashed(Pageable pageable);
 

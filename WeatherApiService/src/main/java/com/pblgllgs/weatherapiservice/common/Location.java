@@ -62,6 +62,14 @@ public class Location {
         this.countryCode = countryCode;
     }
 
+    public Location(String code ,String cityName, String regionName, String countryName, String countryCode) {
+        this.code = code;
+        this.cityName = cityName;
+        this.regionName = regionName;
+        this.countryName = countryName;
+        this.countryCode = countryCode;
+    }
+
 
     public void copyFieldsFrom(Location another) {
         setCityName(another.getCityName());

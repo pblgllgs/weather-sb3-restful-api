@@ -1,7 +1,7 @@
 package com.pblgllgs.weatherapiservice.location;
 
 import com.pblgllgs.weatherapiservice.common.Location;
-import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 @DataJpaTest
+@Slf4j
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class FilterableLocationRepositoryTests {
 
@@ -33,18 +34,21 @@ class FilterableLocationRepositoryTests {
     private LocationRepository locationRepository;
 
     @Test
-    void testListWithDefaults(){
+    void testListWithDefaults() {
         int pageSize = 5;
-        int pageNum= 0;
+        int pageNum = 1;
 
         String sortField = "code";
 
         Sort sort = Sort.by(sortField).ascending();
-        Pageable pageable = PageRequest.of(pageNum,pageSize,sort);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
 
         Page<Location> page = locationRepository.listWithFilter(pageable, Collections.emptyMap());
 
         List<Location> content = page.getContent();
+
+        log.info("Total elements: " + page.getTotalElements());
+        assertThat(page.getTotalElements()).isGreaterThan(pageable.getOffset() +content.size());
 
         assertThat(content).size().isEqualTo(pageSize);
         assertThat(content).isSortedAccordingTo(new Comparator<Location>() {
@@ -58,18 +62,21 @@ class FilterableLocationRepositoryTests {
     }
 
     @Test
-    void testListNoFilterAndSortedByCityName(){
+    void testListNoFilterAndSortedByCityName() {
         int pageSize = 5;
-        int pageNum= 0;
+        int pageNum = 0;
 
         String sortField = "cityName";
 
         Sort sort = Sort.by(sortField).ascending();
-        Pageable pageable = PageRequest.of(pageNum,pageSize,sort);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
 
         Page<Location> page = locationRepository.listWithFilter(pageable, Collections.emptyMap());
 
         List<Location> content = page.getContent();
+
+        log.info("Total elements: " + page.getTotalElements());
+        assertThat(page.getTotalElements()).isGreaterThan(pageable.getOffset() +content.size());
 
         assertThat(content).size().isEqualTo(pageSize);
         assertThat(content).isSortedAccordingTo(new Comparator<Location>() {
@@ -83,19 +90,22 @@ class FilterableLocationRepositoryTests {
     }
 
     @Test
-    void testListFilterRegionSortedByCityName(){
-        int pageSize = 1;
-        int pageNum= 0;
+    void testListFilterRegionNameSortedByCityName() {
+        int pageSize = 5;
+        int pageNum = 0;
 
         String sortField = "cityName";
         String regionName = "California";
 
         Sort sort = Sort.by(sortField).ascending();
-        Pageable pageable = PageRequest.of(pageNum,pageSize,sort);
-        Map<String,Object> filterFields = Map.of("regionName",regionName);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        Map<String, Object> filterFields = Map.of("regionName", regionName);
         Page<Location> page = locationRepository.listWithFilter(pageable, filterFields);
 
         List<Location> content = page.getContent();
+
+        log.info("Total elements: " + page.getTotalElements());
+        assertThat(page.getTotalElements()).isGreaterThan(pageable.getOffset() +content.size());
 
         assertThat(content).size().isEqualTo(pageSize);
         assertThat(content).isSortedAccordingTo(new Comparator<Location>() {
@@ -105,25 +115,28 @@ class FilterableLocationRepositoryTests {
             }
         });
 
-        content.forEach( location -> assertThat(location.getRegionName()).isEqualTo(regionName));
+        content.forEach(location -> assertThat(location.getRegionName()).isEqualTo(regionName));
 
         content.forEach(System.out::println);
     }
 
     @Test
-    void testListFilterByCountryCodeSortedByCode(){
+    void testListFilterByCountryCodeSortedByCode() {
         int pageSize = 5;
-        int pageNum= 0;
+        int pageNum = 0;
 
         String sortField = "code";
         String countryCode = "US";
 
         Sort sort = Sort.by(sortField).ascending();
-        Pageable pageable = PageRequest.of(pageNum,pageSize,sort);
-        Map<String,Object> filterFields = Map.of("countryCode",countryCode);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        Map<String, Object> filterFields = Map.of("countryCode", countryCode);
         Page<Location> page = locationRepository.listWithFilter(pageable, filterFields);
 
         List<Location> content = page.getContent();
+
+        log.info("Total elements: " + page.getTotalElements());
+        assertThat(page.getTotalElements()).isGreaterThan(pageable.getOffset() +content.size());
 
         assertThat(content).size().isEqualTo(pageSize);
         assertThat(content).isSortedAccordingTo(new Comparator<Location>() {
@@ -133,23 +146,23 @@ class FilterableLocationRepositoryTests {
             }
         });
 
-        content.forEach( location -> assertThat(location.getCountryCode()).isEqualTo(countryCode));
+        content.forEach(location -> assertThat(location.getCountryCode()).isEqualTo(countryCode));
 
         content.forEach(System.out::println);
     }
 
     @Test
-    void testListFilterByCountryCodeAndEnableAndSortedByCityName(){
+    void testListFilterByCountryCodeAndEnableAndSortedByCityName() {
         int pageSize = 5;
-        int pageNum= 0;
+        int pageNum = 0;
 
         String sortField = "cityName";
         boolean enabled = true;
         String countryCode = "US";
 
         Sort sort = Sort.by(sortField).ascending();
-        Pageable pageable = PageRequest.of(pageNum,pageSize,sort);
-        Map<String,Object> filterFields = Map.of("countryCode",countryCode,"enabled",enabled);
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        Map<String, Object> filterFields = Map.of("countryCode", countryCode, "enabled", enabled);
         Page<Location> page = locationRepository.listWithFilter(pageable, filterFields);
 
         List<Location> content = page.getContent();
@@ -162,7 +175,7 @@ class FilterableLocationRepositoryTests {
             }
         });
 
-        content.forEach( location -> {
+        content.forEach(location -> {
             assertThat(location.getCountryCode()).isEqualTo(countryCode);
             assertThat(location.isEnabled()).isTrue();
 
