@@ -13,7 +13,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.hibernate.loader.ast.spi.Loadable;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -31,7 +30,7 @@ class LocationCriteriaQueryTests {
     private EntityManager entityManager;
 
     @Test
-    void testCriteriaQuery(){
+    void testCriteriaQuery() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Location> query = builder.createQuery(Location.class);
         Root<Location> root = query.from(Location.class);
@@ -52,7 +51,7 @@ class LocationCriteriaQueryTests {
     }
 
     @Test
-    void testJPQL(){
+    void testJPQL() {
         String jpql = "FROM Location WHERE countryCode = 'US' ORDER BY countryName";
         TypedQuery<Location> query = entityManager.createQuery(jpql, Location.class);
         List<Location> resultList = query.getResultList();

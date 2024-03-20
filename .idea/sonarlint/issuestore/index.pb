@@ -194,3 +194,9 @@ WWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/base/MainControl
 bWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/full/FullWeatherModelAssembler.java,2\f\2f799fb0c014ed7178d874fdde86fe24ac8f5124
 ó
 gWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/location/LocationCriteriaQueryTests.java,e\8\e82870a0749db79f1eb1260fe5ffc9ac5bc2bd3c
+ô
+iWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/FilterableLocationRepository.java,2\3\23db6caa285784431298ef411e9169ab1834a1d5
+ù
+mWeatherApiService/src/main/java/com/pblgllgs/weatherapiservice/location/FilterableLocationRepositoryImpl.java,1\2\126298b010a5e37999c6dd1dd2ae85e98954a2e7
+û
+nWeatherApiService/src/test/java/com/pblgllgs/weatherapiservice/location/FilterableLocationRepositoryTests.java,e\2\e2498da11e24884be7e3d88102852b81d89a3d3b
