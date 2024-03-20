@@ -1,9 +1,13 @@
 
+	java:S112§"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8®üÉîå1J$761afeae-63ad-4312-a0ac-9abcb5a9b133
+	java:S112©"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8¯üÉîå1J$97f8aa08-ae64-4793-a9c0-3b891005880f
 ‹
-java:S1192)"HDefine a constant instead of duplicating this literal "enabled" 3 times.(„Ó†­8Ã½–êå1J$70c8fc61-8dcd-4758-b57b-3ede0da0b55d
+java:S1192/"HDefine a constant instead of duplicating this literal "enabled" 3 times.(„Ó†­8°üÉîå1J$ea48dda7-3fd6-4696-9464-ad5c5c82522f
 ‹
-java:S63553"HAdd 'since' and/or 'forRemoval' arguments to the @Deprecated annotation.(õˆúš8ï½–êå1J$17b11312-79dc-41ef-981d-bafee929c02f
+java:S6355:"HAdd 'since' and/or 'forRemoval' arguments to the @Deprecated annotation.(õˆúš8àüÉîå1J$ad3637c4-9855-4a77-9bdd-78f423513244
 }
-java:S11334"5Do not forget to remove this deprecated code someday.(Å¬‹„ùÿÿÿÿ8ï½–êå1J$26ab71a1-848e-4e3e-8e69-a5ced3f3b6fb
+java:S1133;"5Do not forget to remove this deprecated code someday.(Å¬‹„ùÿÿÿÿ8àüÉîå1J$2c44d5a4-8968-4eea-945d-a0ae59d2a950
 p
-java:S11234"(Add the missing @deprecated Javadoc tag.(Å¬‹„ùÿÿÿÿ8ğ½–êå1J$08afe808-d053-44b4-ba47-1eddd320a645
+java:S1123;"(Add the missing @deprecated Javadoc tag.(Å¬‹„ùÿÿÿÿ8àüÉîå1J$2e8d07b0-6c0f-4c56-9c9a-55562cc14b53
+‰
+java:S2147¨"ECombine this catch with the one at line 166, which has the same body.(ï­£Ä8êüÉîå1J$f2cdcbf0-df8f-451d-b22d-e08f344c4744

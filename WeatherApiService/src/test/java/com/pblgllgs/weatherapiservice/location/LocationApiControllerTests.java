@@ -35,7 +35,7 @@ class LocationApiControllerTests {
     LocationService locationService;
 
     @Test
-    void testAddShouldReturn400BadRequest() throws Exception {
+    void testAddLocationShouldReturn400BadRequest() throws Exception {
         LocationDTO location = new LocationDTO();
         String bodyContent = mapper.writeValueAsString(location);
         mockMvc
@@ -49,9 +49,9 @@ class LocationApiControllerTests {
     }
 
     @Test
-    void testAddShouldReturn201Created() throws Exception {
+    void testAddLocationShouldReturn201Created() throws Exception {
         Location location = new Location();
-        location.setCode("NYCS_US");
+        location.setCode("NYC_US");
         location.setCityName("New York City");
         location.setRegionName("New York");
         location.setCountryCode("US");
@@ -72,14 +72,19 @@ class LocationApiControllerTests {
         mockMvc
                 .perform(
                         post(END_POINT_PATH)
-                                .contentType("application/json")
+                                .contentType("application/hal+json")
                                 .content(bodyContent)
                 )
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/hal+json"))
-                .andExpect(jsonPath("$.code", is("NYCS_US")))
+                .andExpect(jsonPath("$.code", is("NYC_US")))
                 .andExpect(jsonPath("$.city_name", is("New York City")))
-                .andExpect(header().string("Location", "/v1/locations/NYCS_US"))
+                .andExpect(header().string("Location", "/v1/locations/NYC_US"))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/locations/"+location.getCode())))
+                .andExpect(jsonPath("$._links.daily_forecast.href",is("http://localhost/v1/daily/"+location.getCode())))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly/"+location.getCode())))
+                .andExpect(jsonPath("$._links.realtime_weather.href",is("http://localhost/v1/realtime/"+location.getCode())))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full/"+location.getCode())))
                 .andDo(print());
     }
 
@@ -530,16 +535,16 @@ class LocationApiControllerTests {
 
     @Test
     void testGetLocation200Success() throws Exception {
-        Location location1 = new Location();
-        location1.setCode("NYC_USA");
-        location1.setCityName("New York City");
-        location1.setRegionName("New York");
-        location1.setCountryCode("US");
-        location1.setCountryName("United States of America");
-        location1.setEnabled(true);
+        Location location = new Location();
+        location.setCode("NYC_USA");
+        location.setCityName("New York City");
+        location.setRegionName("New York");
+        location.setCountryCode("US");
+        location.setCountryName("United States of America");
+        location.setEnabled(true);
         String code = "CH_CL";
         String requestURI = END_POINT_PATH + "/" + code;
-        Mockito.when(locationService.getLocation(code)).thenReturn(location1);
+        Mockito.when(locationService.getLocation(code)).thenReturn(location);
         mockMvc
                 .perform(
                         get(requestURI))
@@ -547,6 +552,11 @@ class LocationApiControllerTests {
                 .andExpect(content().contentType("application/hal+json"))
                 .andExpect(jsonPath("$.code", is("NYC_USA")))
                 .andExpect(jsonPath("$.city_name", is("New York City")))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/locations/"+location.getCode())))
+                .andExpect(jsonPath("$._links.daily_forecast.href",is("http://localhost/v1/daily/"+location.getCode())))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly/"+location.getCode())))
+                .andExpect(jsonPath("$._links.realtime_weather.href",is("http://localhost/v1/realtime/"+location.getCode())))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full/"+location.getCode())))
                 .andDo(print());
     }
 
@@ -619,6 +629,12 @@ class LocationApiControllerTests {
                 .andExpect(content().contentType("application/hal+json"))
                 .andExpect(jsonPath("$.code", is("NYC_USA")))
                 .andExpect(jsonPath("$.city_name", is("New York City")))
+                .andExpect(jsonPath("$._links.self.href",is("http://localhost/v1/locations/"+location.getCode())))
+                .andExpect(jsonPath("$._links.daily_forecast.href",is("http://localhost/v1/daily/"+location.getCode())))
+                .andExpect(jsonPath("$._links.hourly_forecast.href",is("http://localhost/v1/hourly/"+location.getCode())))
+                .andExpect(jsonPath("$._links.realtime_weather.href",is("http://localhost/v1/realtime/"+location.getCode())))
+                .andExpect(jsonPath("$._links.full_forecast.href",is("http://localhost/v1/full/"+location.getCode())))
+
                 .andDo(print());
     }
 

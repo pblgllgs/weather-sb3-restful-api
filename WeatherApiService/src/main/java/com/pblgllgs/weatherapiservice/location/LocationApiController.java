@@ -1,7 +1,12 @@
 package com.pblgllgs.weatherapiservice.location;
 
 import com.pblgllgs.weatherapiservice.BadRequestException;
+import com.pblgllgs.weatherapiservice.GeolocationException;
 import com.pblgllgs.weatherapiservice.common.Location;
+import com.pblgllgs.weatherapiservice.daily.DailyWeatherApiController;
+import com.pblgllgs.weatherapiservice.full.FullWeatherApiController;
+import com.pblgllgs.weatherapiservice.hourlyweather.HourlyWeatherApiController;
+import com.pblgllgs.weatherapiservice.realtime.RealtimeWeatherApiController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -16,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -42,10 +48,11 @@ public class LocationApiController {
     );
 
     @PostMapping
-    public ResponseEntity<LocationDTO> addLocation(@Valid @RequestBody LocationDTO locationDTO) {
-        Location addedLocation = locationService.add(dtoToEntity(locationDTO));
+    public ResponseEntity<LocationDTO> addLocation(@Valid @RequestBody LocationDTO locationDTO) throws GeolocationException, IOException {
+        Location newLocation = locationService.add(dtoToEntity(locationDTO));
         URI uri = URI.create("/v1/locations/" + locationDTO.getCode());
-        return ResponseEntity.created(uri).body(entity2DTO(addedLocation));
+        LocationDTO addedLocation = entity2DTO(newLocation);
+        return ResponseEntity.created(uri).body(addLinksToItem(addedLocation));
     }
 
     @Deprecated
@@ -63,13 +70,26 @@ public class LocationApiController {
             @Min(value = 1) Integer pageNum,
             @RequestParam(value = "size", required = false, defaultValue = "3")
             @Min(value = 3) @Max(value = 20) Integer pageSize,
-            @RequestParam(value = "sort", required = false, defaultValue = "code") String sortField,
+            @RequestParam(value = "sort", required = false, defaultValue = "code") String sortOption,
             @RequestParam(value = "enabled", required = false, defaultValue = "") String enabled,
             @RequestParam(value = "region_name", required = false, defaultValue = "") String regionName,
             @RequestParam(value = "country_code", required = false, defaultValue = "") String countryCode
     ) throws BadRequestException {
-        if (!propertyMap.containsKey(sortField)) {
-            throw new BadRequestException("Invalid Sort Field: " + sortField);
+        String[] sortFields = sortOption.split(",");
+        if (sortFields.length > 1){
+            for (int i = 0; i < sortFields.length; i++) {
+                String actualFieldName = sortFields[i].replace("-", "");
+                if (!propertyMap.containsKey(actualFieldName)) {
+                    throw new BadRequestException("Invalid Sort Field: " + sortOption);
+                }
+                sortOption = sortOption.replace(actualFieldName,propertyMap.get(actualFieldName));
+            }
+        }else {
+            String actualFieldName = sortOption.replace("-", "");
+            if (!propertyMap.containsKey(actualFieldName)) {
+                throw new BadRequestException("Invalid Sort Field: " + sortOption);
+            }
+            sortOption = sortOption.replace(actualFieldName,propertyMap.get(actualFieldName));
         }
         Map<String, Object> filterFields = new HashMap<>();
         if (!"".equals(enabled)) {
@@ -84,26 +104,26 @@ public class LocationApiController {
         Page<Location> page = locationService.listByPage(
                 pageNum - 1,
                 pageSize,
-                propertyMap.get(sortField),
+                sortOption,
                 filterFields
         );
         List<Location> locations = page.getContent();
         if (locations.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(addPageMetaDataAndLinks(listEntity2ListDTO(locations), page, sortField, enabled, regionName, countryCode));
+        return ResponseEntity.ok(addPageMetaDataAndLinks(listEntity2ListDTO(locations), page, sortOption, enabled, regionName, countryCode));
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<Object> getLocation(@PathVariable("code") String code) {
+    public ResponseEntity<Object> getLocation(@PathVariable("code") String code) throws GeolocationException, IOException {
         Location location = locationService.getLocation(code);
-        return ResponseEntity.ok(entity2DTO(location));
+        return ResponseEntity.ok(addLinksToItem(entity2DTO(location)));
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateLocation(@Valid @RequestBody LocationDTO locationDTO) {
+    public ResponseEntity<Object> updateLocation(@Valid @RequestBody LocationDTO locationDTO) throws GeolocationException, IOException {
         Location updateLocation = locationService.update(dtoToEntity(locationDTO));
-        return ResponseEntity.ok(entity2DTO(updateLocation));
+        return ResponseEntity.ok(addLinksToItem(entity2DTO(updateLocation)));
     }
 
     @DeleteMapping("/{code}")
@@ -136,11 +156,19 @@ public class LocationApiController {
         String actualRegionName = "".equals(regionName) ? null : regionName;
         String actualCountryCode = "".equals(countryCode) ? null : countryCode;
         listDto.forEach(dto ->
-                dto.add(
-                        linkTo(
-                                methodOn(LocationApiController.class)
-                                        .getLocation(dto.getCode())
-                        ).withSelfRel())
+                {
+                    try {
+                        dto.add(
+                                linkTo(
+                                        methodOn(LocationApiController.class)
+                                                .getLocation(dto.getCode())
+                                ).withSelfRel());
+                    } catch (GeolocationException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
         );
         int pageSize = pageInfo.getSize();
         int pageNum = pageInfo.getNumber() + 1;
@@ -184,5 +212,36 @@ public class LocationApiController {
             );
         }
         return collectionModels;
+    }
+
+    private LocationDTO addLinksToItem(
+            LocationDTO dto
+    ) throws GeolocationException, IOException {
+        dto.add(
+                linkTo(
+                        methodOn(LocationApiController.class)
+                                .getLocation(dto.getCode())
+                ).withSelfRel());
+        dto.add(
+                linkTo(
+                        methodOn(DailyWeatherApiController.class)
+                                .listDailyForecastByLocationCode(dto.getCode())
+                ).withRel("daily_forecast"));
+        dto.add(
+                linkTo(
+                        methodOn(HourlyWeatherApiController.class)
+                                .findHourlyWeatherForecastByLocationCode(null, dto.getCode())
+                ).withRel("hourly_forecast"));
+        dto.add(
+                linkTo(
+                        methodOn(RealtimeWeatherApiController.class)
+                                .getRealtimeWeatherByLocationCode(dto.getCode())
+                ).withRel("realtime_weather"));
+        dto.add(
+                linkTo(
+                        methodOn(FullWeatherApiController.class)
+                                .getFullWeatherByLocationCode(dto.getCode())
+                ).withRel("full_forecast"));
+        return dto;
     }
 }

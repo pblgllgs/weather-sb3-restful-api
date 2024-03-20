@@ -44,9 +44,13 @@ public class FilterableLocationRepositoryImpl implements FilterableLocationRepos
 
         List<Order> listOrder = new ArrayList<>();
 
-        pageable.getSort().stream().forEach( order -> {
-            log.info("Order field: " +order.getProperty());
-            listOrder.add(criteriaBuilder.asc(entityRoot.get(order.getProperty())));
+        pageable.getSort().stream().forEach(order -> {
+            log.info("Order field: " + order.getProperty());
+            if (order.isAscending()) {
+                listOrder.add(criteriaBuilder.asc(entityRoot.get(order.getProperty())));
+            }else {
+                listOrder.add(criteriaBuilder.desc(entityRoot.get(order.getProperty())));
+            }
         });
 
         entityQuery.orderBy(listOrder);
@@ -66,22 +70,22 @@ public class FilterableLocationRepositoryImpl implements FilterableLocationRepos
             Map<String, Object> filterFields,
             CriteriaBuilder criteriaBuilder,
             Root<Location> root) {
-        Predicate[]predicates = new Predicate[filterFields.size() + 1];
-        if (!filterFields.isEmpty()){
+        Predicate[] predicates = new Predicate[filterFields.size() + 1];
+        if (!filterFields.isEmpty()) {
             Iterator<String> iterator = filterFields.keySet().iterator();
             int i = 0;
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 String fieldName = iterator.next();
                 Object filterValue = filterFields.get(fieldName);
                 log.info(fieldName + " => " + filterValue);
-                predicates[i++] = criteriaBuilder.equal(root.get(fieldName),filterValue);
+                predicates[i++] = criteriaBuilder.equal(root.get(fieldName), filterValue);
             }
         }
-        predicates[predicates.length -1 ] = criteriaBuilder.equal(root.get("trashed"),false);
+        predicates[predicates.length - 1] = criteriaBuilder.equal(root.get("trashed"), false);
         return predicates;
     }
 
-    private long getTotalRows(Map<String, Object> filterFields){
+    private long getTotalRows(Map<String, Object> filterFields) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
@@ -90,7 +94,7 @@ public class FilterableLocationRepositoryImpl implements FilterableLocationRepos
         countQuery.select(builder.count(countRoot));
 
         Predicate[] predicates = createPredicates(filterFields, builder, countRoot);
-        
+
         if (predicates.length > 0) countQuery.where(predicates);
 
         return entityManager.createQuery(countQuery).getSingleResult();
