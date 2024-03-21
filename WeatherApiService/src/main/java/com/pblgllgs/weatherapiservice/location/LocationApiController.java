@@ -75,32 +75,8 @@ public class LocationApiController {
             @RequestParam(value = "region_name", required = false, defaultValue = "") String regionName,
             @RequestParam(value = "country_code", required = false, defaultValue = "") String countryCode
     ) throws BadRequestException {
-        String[] sortFields = sortOption.split(",");
-        if (sortFields.length > 1){
-            for (int i = 0; i < sortFields.length; i++) {
-                String actualFieldName = sortFields[i].replace("-", "");
-                if (!propertyMap.containsKey(actualFieldName)) {
-                    throw new BadRequestException("Invalid Sort Field: " + sortOption);
-                }
-                sortOption = sortOption.replace(actualFieldName,propertyMap.get(actualFieldName));
-            }
-        }else {
-            String actualFieldName = sortOption.replace("-", "");
-            if (!propertyMap.containsKey(actualFieldName)) {
-                throw new BadRequestException("Invalid Sort Field: " + sortOption);
-            }
-            sortOption = sortOption.replace(actualFieldName,propertyMap.get(actualFieldName));
-        }
-        Map<String, Object> filterFields = new HashMap<>();
-        if (!"".equals(enabled)) {
-            filterFields.put("enabled", Boolean.parseBoolean(enabled));
-        }
-        if (!"".equals(regionName)) {
-            filterFields.put("regionName", regionName);
-        }
-        if (!"".equals(countryCode)) {
-            filterFields.put("countryCode", countryCode);
-        }
+        sortOption = validateSortOption(sortOption);
+        Map<String, Object> filterFields = getFilterFields(enabled, regionName, countryCode);
         Page<Location> page = locationService.listByPage(
                 pageNum - 1,
                 pageSize,
@@ -112,6 +88,41 @@ public class LocationApiController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(addPageMetaDataAndLinks(listEntity2ListDTO(locations), page, sortOption, enabled, regionName, countryCode));
+    }
+
+    private static Map<String, Object> getFilterFields(String enabled, String regionName, String countryCode) {
+        Map<String, Object> filterFields = new HashMap<>();
+        if (!"".equals(enabled)) {
+            filterFields.put("enabled", Boolean.parseBoolean(enabled));
+        }
+        if (!"".equals(regionName)) {
+            filterFields.put("regionName", regionName);
+        }
+        if (!"".equals(countryCode)) {
+            filterFields.put("countryCode", countryCode);
+        }
+        return filterFields;
+    }
+
+    private String validateSortOption(String sortOption) throws BadRequestException {
+        String translatedSortOption = sortOption;
+        String[] sortFields = sortOption.split(",");
+        if (sortFields.length > 1){
+            for (int i = 0; i < sortFields.length; i++) {
+                String actualFieldName = sortFields[i].replace("-", "");
+                if (!propertyMap.containsKey(actualFieldName)) {
+                    throw new BadRequestException("Invalid Sort Field: " + sortOption);
+                }
+                translatedSortOption = translatedSortOption.replace(actualFieldName,propertyMap.get(actualFieldName));
+            }
+        }else {
+            String actualFieldName = sortOption.replace("-", "");
+            if (!propertyMap.containsKey(actualFieldName)) {
+                throw new BadRequestException("Invalid Sort Field: " + sortOption);
+            }
+            translatedSortOption = translatedSortOption.replace(actualFieldName,propertyMap.get(actualFieldName));
+        }
+        return translatedSortOption;
     }
 
     @GetMapping("/{code}")

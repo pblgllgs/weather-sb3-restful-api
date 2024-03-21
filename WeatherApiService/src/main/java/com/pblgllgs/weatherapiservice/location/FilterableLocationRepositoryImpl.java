@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Repository
 @Slf4j
 public class FilterableLocationRepositoryImpl implements FilterableLocationRepository {
 
@@ -37,6 +38,16 @@ public class FilterableLocationRepositoryImpl implements FilterableLocationRepos
         CriteriaQuery<Location> entityQuery = criteriaBuilder.createQuery(Location.class);
 
         Root<Location> entityRoot = entityQuery.from(Location.class);
+
+        entityQuery.select(
+                criteriaBuilder.construct(Location.class,
+                        entityRoot.get("code"),
+                        entityRoot.get("cityName"),
+                        entityRoot.get("regionName"),
+                        entityRoot.get("countryName"),
+                        entityRoot.get("countryCode"),
+                        entityRoot.get("enabled")
+                ));
 
         Predicate[] predicates = createPredicates(filterFields, criteriaBuilder, entityRoot);
 
